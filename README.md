@@ -2,18 +2,48 @@
 
 AI Coding LMS is a planned learning platform for practicing Python in the browser. When a learner fails a test, the app will explain the likely mistake, offer a curated resource, and recommend practice problems for the concept they struggled with.
 
-**Status:** This repository currently contains only this README. There is no application to install or run yet.
+**Status:** The web and API scaffolds run locally. The learning flow, schema, sign-in, and AI feedback are not implemented yet.
 
 ## Getting started
 
-Clone the repository to follow development:
+Prerequisites: Node.js 24 with npm and Python 3.12 with pip. Clone the repository:
 
 ```sh
 git clone https://github.com/Hash-Noone/ai-coding-lms.git
 cd ai-coding-lms
 ```
 
-Local setup instructions will follow once the web app, API, and database are in place.
+### Web app
+
+From the repository root:
+
+```sh
+cd web
+npm ci
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173). From `web/`, run `npm run lint`, `npm test`, and `npm run build` to run the same checks as CI.
+
+### API
+
+In a separate terminal, from the repository root:
+
+```sh
+cd api
+python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e '.[dev]'
+python -m uvicorn app.main:app --reload
+```
+
+Check [http://localhost:8000/health](http://localhost:8000/health). From `api/` with the environment active, run `ruff check .` and `python -m pytest`.
+
+### Local configuration
+
+Neither app nor CI needs credentials for the scaffold checks. Once a Supabase or Neon Postgres project is available, copy `api/.env.example` to `api/.env` and set `DATABASE_URL` to the provider's PostgreSQL connection URI. With the virtual environment active, run `python -m app.check_db` from `api/` to verify the connection.
+
+Each teammate should set `GEMINI_API_KEY` in their own `api/.env` when working on AI feedback. This scaffold does not call Gemini. Never commit `.env` or include these values in the web app; the deployed API will use a separate server-side key.
 
 ## Planned architecture
 
@@ -27,14 +57,13 @@ Local setup instructions will follow once the web app, API, and database are in 
 
 Each developer uses their own Gemini key in a local, uncommitted `.env` file. The deployed API uses a paid Gemini key set as a server-side host environment variable. The browser never calls the LLM provider directly.
 
-### Planned repository layout
+### Repository layout
 
 ```text
 web/                 Frontend and browser runner
 api/                 FastAPI service
 scripts/             Problem validation and resource link checks
-data/
-  taxonomy.json      Versioned 10-category mistake taxonomy
+data/                Versioned taxonomy (planned for step 2)
 ```
 
 ## Build roadmap
