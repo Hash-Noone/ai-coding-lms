@@ -10,6 +10,7 @@ from sqlalchemy.engine import make_url
 from sqlalchemy.exc import IntegrityError
 
 TESTS_DIR = Path(__file__).parent
+AUTH_STUB = TESTS_DIR / "fixtures/supabase_auth.sql"
 TABLES = {
     "users", "concepts", "problems", "test_cases", "attempts", "mastery",
     "questions", "resources", "resource_clicks", "problem_concepts", "resource_concepts",
@@ -25,7 +26,7 @@ def postgres():
     engine = create_engine(make_url(url).set(drivername="postgresql+psycopg"))
     try:
         with engine.connect() as connection, connection.begin() as transaction:
-            connection.exec_driver_sql((TESTS_DIR / "fixtures/supabase_auth.sql").read_text())
+            connection.exec_driver_sql(AUTH_STUB.read_text())
             config = Config(TESTS_DIR.parent / "alembic.ini")
             config.attributes["connection"] = connection
             yield connection, config
@@ -106,6 +107,7 @@ def test_migration_lifecycle(postgres):
     assert not TABLES.intersection(public_tables)
     assert sql("SELECT id FROM auth.users").scalar_one() == existing_user
 
+    sql(AUTH_STUB.read_text())
     command.upgrade(config, "head")
     assert sql("SELECT id FROM public.users").scalar_one() == existing_user
     assert sql("SELECT count(*) FROM public.concepts").scalar_one() == 12
