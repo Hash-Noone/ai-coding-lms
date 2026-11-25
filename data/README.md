@@ -1,3 +1,5 @@
 # Data
 
-The versioned mistake taxonomy will be added in step 2.
+`taxonomy.json` defines the current mistake types. Use each entry's stable `id`
+in resource metadata and classifier labels. Increment `version` when changing
+the taxonomy so labels can be traced to the version used.

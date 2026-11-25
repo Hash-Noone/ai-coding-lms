@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "mistake_types": [
+    {"id": "syntax", "description": "The code cannot be parsed as Python."},
+    {"id": "name_resolution", "description": "A name is undefined or used outside its scope."},
+    {"id": "type_mismatch", "description": "A value has a type that is incompatible with an operation."},
+    {"id": "off_by_one", "description": "A boundary is one position too early or too late."},
+    {"id": "index_or_key", "description": "A lookup uses an invalid index or missing key."},
+    {"id": "condition_logic", "description": "A branch condition behaves incorrectly for some inputs."},
+    {"id": "loop_logic", "description": "Iteration, termination, or state updates inside a loop are incorrect."},
+    {"id": "function_contract", "description": "A function receives the wrong arguments or returns the wrong result."},
+    {"id": "state_management", "description": "A value is initialized, reset, or mutated at the wrong point."},
+    {"id": "edge_case", "description": "The code fails on a special input not covered by a more specific category."}
+  ]
+}

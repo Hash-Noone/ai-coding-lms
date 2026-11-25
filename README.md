@@ -2,7 +2,7 @@
 
 AI Coding LMS is a planned learning platform for practicing Python in the browser. When a learner fails a test, the app will explain the likely mistake, offer a curated resource, and recommend practice problems for the concept they struggled with.
 
-**Status:** The web and API scaffolds run locally. The learning flow, schema, sign-in, and AI feedback are not implemented yet.
+**Status:** The web and API scaffolds run locally. The database schema and Supabase sign-in are implemented; the learning flow and AI feedback are not.
 
 ## Getting started
 
@@ -41,9 +41,33 @@ Check [http://localhost:8000/health](http://localhost:8000/health). From `api/` 
 
 ### Local configuration
 
-Neither app nor CI needs credentials for the scaffold checks. Once a Supabase or Neon Postgres project is available, copy `api/.env.example` to `api/.env` and set `DATABASE_URL` to the provider's PostgreSQL connection URI. With the virtual environment active, run `python -m app.check_db` from `api/` to verify the connection.
+CI does not require a hosted Supabase project. It runs the migration test on a local PostgreSQL service and mocks the auth client in web tests.
 
 Each teammate should set `GEMINI_API_KEY` in their own `api/.env` when working on AI feedback. This scaffold does not call Gemini. Never commit `.env` or include these values in the web app; the deployed API will use a separate server-side key.
+
+### Supabase project setup
+
+1. Create a Supabase project. In Authentication, enable the Email provider and allow new users to sign up. For email confirmation, set the Site URL to the deployed web app URL (or `http://localhost:5173` for local-only testing) and configure SMTP for the pilot.
+2. Copy `api/.env.example` to `api/.env` and set `DATABASE_URL` to the database URI from **Connect**, with the database password filled in. Use the direct connection or session pooler URI and add `sslmode=require` if it is not already specified. With the virtual environment active, run `python -m app.check_db` and `alembic upgrade head` from `api/`.
+3. Copy `web/.env.example` to `web/.env` and set `VITE_SUPABASE_URL` to the project URL and `VITE_SUPABASE_PUBLISHABLE_KEY` to the publishable key (the legacy `anon` key also works). Set the same vars before building the deployed frontend. Never use the service-role key, secret key, or database URI in the frontend.
+
+The migration creates a matching LMS user for each Supabase Auth user, including existing accounts. The browser talks directly to Supabase for authentication, but has no direct access to LMS tables. The FastAPI data endpoints and token verification are part of step 5.
+
+### Test migrations on local Postgres
+
+Use an empty PostgreSQL 16+ test database rather than a Supabase or production database. From `api/`, with the virtual environment active:
+
+```sh
+TEST_DATABASE_URL=postgresql://postgres:lms_test@127.0.0.1:5432/lms_test python -m pytest
+```
+
+The test uses a minimal `auth.users` stub and rolls back its changes. To build the LMS schema and seed data on a fresh, empty plain Postgres database in one command, run from `api/`:
+
+```sh
+DATABASE_URL=postgresql://postgres:lms_test@127.0.0.1:5432/lms_test alembic -x local_auth_stub=true upgrade head
+```
+
+The stub is for local database testing only; it does not provide sign-in. On Supabase, use `alembic upgrade head` without the stub flag. To undo all LMS migrations in a disposable database, run `alembic downgrade base` (this deletes LMS data, but leaves Auth users intact).
 
 ## Planned architecture
 
@@ -51,7 +75,7 @@ Each teammate should set `GEMINI_API_KEY` in their own `api/.env` when working o
 | --- | --- |
 | Web app | React or Next.js with Monaco Editor. Pyodide runs learner code and public tests in a Web Worker. The page shows a loading state on first download and replaces the worker on timeout so an infinite loop cannot freeze the page. |
 | API | FastAPI serves problems, records attempts, and returns structured findings from Python's `ast` parser and a linter such as Ruff. The LLM gateway runs only on the API. |
-| Data and sign-in | Postgres on Supabase or Neon, with migrations managed through Alembic or plain SQL in Supabase. Supabase Auth provides real accounts for the pilot; an anonymous browser ID is acceptable for early internal builds. |
+| Data and sign-in | Supabase Postgres with Alembic migrations. Supabase Auth provides email/password accounts. |
 | AI feedback | A provider chain such as Gemini followed by Groq, with a per-user daily cap and a cache keyed by a hash of the problem, code with whitespace and comments stripped, and error signature. Pydantic validates the feedback; low-confidence results fall back to a generic hint. |
 | CI and hosting | GitHub Actions runs lint and tests on every push. Planned hosting options are Vercel or Netlify for the frontend and Render, Railway, or Fly for the API. |
 
@@ -63,7 +87,7 @@ Each developer uses their own Gemini key in a local, uncommitted `.env` file. Th
 web/                 Frontend and browser runner
 api/                 FastAPI service
 scripts/             Problem validation and resource link checks
-data/                Versioned taxonomy (planned for step 2)
+data/                Versioned taxonomy
 ```
 
 ## Build roadmap
