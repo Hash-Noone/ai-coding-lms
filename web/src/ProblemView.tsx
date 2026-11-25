@@ -1,10 +1,31 @@
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import type { BankProblem, CuratedResource } from "virtual:problem-bank";
 import { postAttempt } from "./attempts";
 import { createPythonRunner, RUN_TIMEOUT_MS, type RunnerState, type RunOutcome } from "./pythonRunner";
 
 const PythonEditor = lazy(() => import("./PythonEditor"));
 const apiUrl = import.meta.env.VITE_API_URL?.trim();
+
+function draftKey(slug: string): string {
+  return `ai-coding-lms:draft:${slug}`;
+}
+
+function loadDraft(slug: string, fallback: string): string {
+  try {
+    return window.localStorage.getItem(draftKey(slug)) ?? fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function saveDraft(slug: string, code: string, starterCode: string) {
+  try {
+    if (code === starterCode) window.localStorage.removeItem(draftKey(slug));
+    else window.localStorage.setItem(draftKey(slug), code);
+  } catch {
+    // Ignore storage errors in private browsing.
+  }
+}
 
 function formatValue(value: unknown): string {
   return JSON.stringify(value);
@@ -37,7 +58,8 @@ export function ProblemView({
   onSolved?: (slug: string) => void;
   accessToken?: string;
 }) {
-  const [code, setCode] = useState(problem.starterCode);
+  const [initialCode, setInitialCode] = useState(() => loadDraft(problem.slug, problem.starterCode));
+  const [code, setCode] = useState(initialCode);
   const [resetCount, setResetCount] = useState(0);
   const [editorReady, setEditorReady] = useState(false);
   const [runnerState, setRunnerState] = useState<RunnerState>("idle");
@@ -91,7 +113,17 @@ export function ProblemView({
     if (runner.current === instance && runSequence.current === sequence) setSaveStatus(message);
   }
 
+  const handleCodeChange = useCallback(
+    (nextCode: string) => {
+      setCode(nextCode);
+      saveDraft(problem.slug, nextCode, problem.starterCode);
+    },
+    [problem.slug, problem.starterCode],
+  );
+
   function resetStarter() {
+    saveDraft(problem.slug, problem.starterCode, problem.starterCode);
+    setInitialCode(problem.starterCode);
     setCode(problem.starterCode);
     setOutcome(undefined);
     setSaveStatus("");
@@ -158,8 +190,8 @@ export function ProblemView({
           <Suspense fallback={<p>Loading editor…</p>}>
             <PythonEditor
               key={`${problem.slug}-${resetCount}`}
-              initialCode={problem.starterCode}
-              onChange={setCode}
+              initialCode={initialCode}
+              onChange={handleCodeChange}
               onReady={setEditorReady}
             />
           </Suspense>

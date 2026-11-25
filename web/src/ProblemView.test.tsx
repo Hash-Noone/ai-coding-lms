@@ -15,15 +15,33 @@ vi.mock("./pythonRunner", () => ({
 vi.mock("./PythonEditor", async () => {
   const { useEffect } = await import("react");
   return {
-    default: ({ onReady }: { onReady: (ready: boolean) => void }) => {
+    default: ({
+      initialCode,
+      onChange,
+      onReady,
+    }: {
+      initialCode: string;
+      onChange: (code: string) => void;
+      onReady: (ready: boolean) => void;
+    }) => {
       useEffect(() => onReady(true), [onReady]);
-      return <div>Python editor ready</div>;
+      return (
+        <div>
+          <span>Python editor ready</span>
+          <textarea
+            aria-label="Mock Python editor"
+            defaultValue={initialCode}
+            onChange={(event) => onChange(event.target.value)}
+          />
+        </div>
+      );
     },
   };
 });
 
 afterEach(() => {
   cleanup();
+  window.localStorage.clear();
   vi.unstubAllGlobals();
   vi.resetAllMocks();
 });
@@ -55,6 +73,26 @@ it("opens a problem from the bank and shows pass or fail for each public test", 
     entryPoint: sumOfEvens.entryPoint,
     tests: sumOfEvens.publicTests,
   });
+});
+
+it("preserves draft code across navigation until reset", async () => {
+  const sumOfEvens = problems.find((p) => p.slug === "sum-of-evens")!;
+  const user = userEvent.setup();
+  render(<App />);
+
+  await user.click(screen.getByRole("button", { name: `Open ${sumOfEvens.title}` }));
+  const editor = await screen.findByLabelText("Mock Python editor") as HTMLTextAreaElement;
+  await user.clear(editor);
+  await user.type(editor, "def sum_evens(numbers): return 42");
+
+  await user.click(screen.getByRole("button", { name: "← All problems" }));
+  await user.click(screen.getByRole("button", { name: `Open ${sumOfEvens.title}` }));
+  const reopened = await screen.findByLabelText("Mock Python editor") as HTMLTextAreaElement;
+  expect(reopened.value).toBe("def sum_evens(numbers): return 42");
+
+  await user.click(screen.getByRole("button", { name: "Reset code" }));
+  const reset = await screen.findByLabelText("Mock Python editor") as HTMLTextAreaElement;
+  expect(reset.value).toBe(sumOfEvens.starterCode);
 });
 
 it("posts the submitted code and public test results to the authenticated attempts endpoint", async () => {
