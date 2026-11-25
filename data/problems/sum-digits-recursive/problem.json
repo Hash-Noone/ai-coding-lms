@@ -1,0 +1,53 @@
+{
+  "slug": "sum-digits-recursive",
+  "title": "Recursive digit sum",
+  "prompt": "Return the sum of the digits of the non-negative integer `n` using recursion.",
+  "entry_point": "digit_sum",
+  "concepts": [
+    "recursion",
+    "operators"
+  ],
+  "public_tests": [
+    {
+      "label": "Three digits",
+      "args": [
+        123
+      ],
+      "expected": 6
+    },
+    {
+      "label": "Single digit",
+      "args": [
+        9
+      ],
+      "expected": 9
+    },
+    {
+      "label": "With zeros",
+      "args": [
+        1001
+      ],
+      "expected": 2
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Zero",
+      "args": [
+        0
+      ],
+      "expected": 0
+    },
+    {
+      "label": "Large number",
+      "args": [
+        987654321
+      ],
+      "expected": 45
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "type_mismatch",
+    "explanation": "Uses / which produces floats instead of dropping the last digit."
+  }
+}

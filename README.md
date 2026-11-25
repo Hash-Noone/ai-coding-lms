@@ -87,7 +87,7 @@ Each developer uses their own Gemini key in a local, uncommitted `.env` file. Th
 web/                 Frontend and browser runner
 api/                 FastAPI service
 scripts/             Problem validation and resource link checks
-data/                Versioned taxonomy
+data/                Taxonomy, concepts, problem bank, and resources
 ```
 
 ## Build roadmap

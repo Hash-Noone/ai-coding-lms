@@ -1,0 +1,52 @@
+{
+  "slug": "grade-letter",
+  "title": "Letter grade",
+  "prompt": "Return the letter grade for a 0-100 `score`: 90 and above is 'A', 80-89 'B', 70-79 'C', 60-69 'D', below 60 'F'.",
+  "entry_point": "letter_grade",
+  "concepts": [
+    "conditionals"
+  ],
+  "public_tests": [
+    {
+      "label": "Clear A",
+      "args": [
+        95
+      ],
+      "expected": "A"
+    },
+    {
+      "label": "Clear C",
+      "args": [
+        75
+      ],
+      "expected": "C"
+    },
+    {
+      "label": "Failing",
+      "args": [
+        30
+      ],
+      "expected": "F"
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Exactly 90",
+      "args": [
+        90
+      ],
+      "expected": "A"
+    },
+    {
+      "label": "Exactly 60",
+      "args": [
+        60
+      ],
+      "expected": "D"
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "off_by_one",
+    "explanation": "Uses > so boundary scores drop a grade."
+  }
+}

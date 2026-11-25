@@ -1,0 +1,66 @@
+{
+  "slug": "total-with-helper",
+  "title": "Total with a helper",
+  "prompt": "Return the total of `amounts`. Write a helper `add(total, amount)` that returns the new total, and use it for each amount.",
+  "entry_point": "tally",
+  "concepts": [
+    "functions",
+    "variables"
+  ],
+  "public_tests": [
+    {
+      "label": "Three amounts",
+      "args": [
+        [
+          1,
+          2,
+          3
+        ]
+      ],
+      "expected": 6
+    },
+    {
+      "label": "One amount",
+      "args": [
+        [
+          10
+        ]
+      ],
+      "expected": 10
+    },
+    {
+      "label": "No amounts",
+      "args": [
+        []
+      ],
+      "expected": 0
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Negatives",
+      "args": [
+        [
+          5,
+          -8
+        ]
+      ],
+      "expected": -3
+    },
+    {
+      "label": "Zeros",
+      "args": [
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "expected": 0
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "function_contract",
+    "explanation": "The helper never returns its result, so total becomes None."
+  }
+}

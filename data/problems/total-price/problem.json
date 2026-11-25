@@ -1,0 +1,65 @@
+{
+  "slug": "total-price",
+  "title": "Total price",
+  "prompt": "`prices` is a list of price strings such as '3' or '12'. Return their total as an int.",
+  "entry_point": "total_price",
+  "concepts": [
+    "types",
+    "loops"
+  ],
+  "public_tests": [
+    {
+      "label": "Three prices",
+      "args": [
+        [
+          "3",
+          "4",
+          "5"
+        ]
+      ],
+      "expected": 12
+    },
+    {
+      "label": "One price",
+      "args": [
+        [
+          "10"
+        ]
+      ],
+      "expected": 10
+    },
+    {
+      "label": "No prices",
+      "args": [
+        []
+      ],
+      "expected": 0
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Zero price",
+      "args": [
+        [
+          "0",
+          "7"
+        ]
+      ],
+      "expected": 7
+    },
+    {
+      "label": "Large values",
+      "args": [
+        [
+          "1000",
+          "2500"
+        ]
+      ],
+      "expected": 3500
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "type_mismatch",
+    "explanation": "Adds strings to an int without converting them."
+  }
+}

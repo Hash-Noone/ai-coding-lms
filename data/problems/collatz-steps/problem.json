@@ -1,0 +1,54 @@
+{
+  "slug": "collatz-steps",
+  "title": "Collatz steps",
+  "prompt": "Return how many steps it takes to reach 1 from the positive integer `n`, where each step halves an even number or turns an odd number into 3n + 1.",
+  "entry_point": "collatz_steps",
+  "concepts": [
+    "loops",
+    "conditionals",
+    "operators"
+  ],
+  "public_tests": [
+    {
+      "label": "Six",
+      "args": [
+        6
+      ],
+      "expected": 8
+    },
+    {
+      "label": "One",
+      "args": [
+        1
+      ],
+      "expected": 0
+    },
+    {
+      "label": "Two",
+      "args": [
+        2
+      ],
+      "expected": 1
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Seven",
+      "args": [
+        7
+      ],
+      "expected": 16
+    },
+    {
+      "label": "Twenty seven",
+      "args": [
+        27
+      ],
+      "expected": 111
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "loop_logic",
+    "explanation": "Counts the step outside the loop body."
+  }
+}

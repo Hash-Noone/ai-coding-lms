@@ -1,0 +1,82 @@
+{
+  "slug": "append-item",
+  "title": "Append to a new list",
+  "prompt": "Return a new list containing `item` added to the end of `items`. When `items` is not given, start from an empty list. Never change the list passed in.",
+  "entry_point": "add_item",
+  "concepts": [
+    "functions",
+    "arrays"
+  ],
+  "public_tests": [
+    {
+      "label": "Default list",
+      "args": [
+        1
+      ],
+      "expected": [
+        1
+      ]
+    },
+    {
+      "label": "Existing list",
+      "args": [
+        3,
+        [
+          1,
+          2
+        ]
+      ],
+      "expected": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "label": "String item",
+      "args": [
+        "x"
+      ],
+      "expected": [
+        "x"
+      ]
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Empty list given",
+      "args": [
+        0,
+        []
+      ],
+      "expected": [
+        0
+      ]
+    },
+    {
+      "label": "Nested item",
+      "args": [
+        [
+          1
+        ],
+        [
+          [
+            0
+          ]
+        ]
+      ],
+      "expected": [
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ]
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "function_contract",
+    "explanation": "Returns the result of append(), which is always None."
+  }
+}

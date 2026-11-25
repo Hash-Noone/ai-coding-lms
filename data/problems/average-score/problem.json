@@ -1,0 +1,66 @@
+{
+  "slug": "average-score",
+  "title": "Average score",
+  "prompt": "Return the average of `scores` rounded to two decimal places, or 0.0 if the list is empty.",
+  "entry_point": "average",
+  "concepts": [
+    "arrays",
+    "operators"
+  ],
+  "public_tests": [
+    {
+      "label": "Whole average",
+      "args": [
+        [
+          80,
+          90,
+          100
+        ]
+      ],
+      "expected": 90.0
+    },
+    {
+      "label": "Fraction",
+      "args": [
+        [
+          1,
+          2
+        ]
+      ],
+      "expected": 1.5
+    },
+    {
+      "label": "Single score",
+      "args": [
+        [
+          73
+        ]
+      ],
+      "expected": 73.0
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Empty list",
+      "args": [
+        []
+      ],
+      "expected": 0.0
+    },
+    {
+      "label": "Repeating decimal",
+      "args": [
+        [
+          1,
+          1,
+          2
+        ]
+      ],
+      "expected": 1.33
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "edge_case",
+    "explanation": "Divides by zero when the list is empty."
+  }
+}

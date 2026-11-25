@@ -1,0 +1,93 @@
+{
+  "slug": "two-sum-indices",
+  "title": "Two sum",
+  "prompt": "Return the indices `[i, j]` (with `i < j`) of the two numbers in `numbers` that add up to `target`. Exactly one pair exists.",
+  "entry_point": "two_sum",
+  "concepts": [
+    "hashing",
+    "arrays"
+  ],
+  "public_tests": [
+    {
+      "label": "Basic",
+      "args": [
+        [
+          2,
+          7,
+          11,
+          15
+        ],
+        9
+      ],
+      "expected": [
+        0,
+        1
+      ]
+    },
+    {
+      "label": "Later pair",
+      "args": [
+        [
+          3,
+          2,
+          4
+        ],
+        6
+      ],
+      "expected": [
+        1,
+        2
+      ]
+    },
+    {
+      "label": "Negative numbers",
+      "args": [
+        [
+          -1,
+          5,
+          3
+        ],
+        2
+      ],
+      "expected": [
+        0,
+        2
+      ]
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Same value twice",
+      "args": [
+        [
+          3,
+          3
+        ],
+        6
+      ],
+      "expected": [
+        0,
+        1
+      ]
+    },
+    {
+      "label": "Zero target",
+      "args": [
+        [
+          4,
+          0,
+          -4
+        ],
+        0
+      ],
+      "expected": [
+        0,
+        2
+      ]
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "state_management",
+    "explanation": "Records the current number before checking, so a number can pair with itself."
+  }
+}

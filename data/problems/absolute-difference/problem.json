@@ -1,0 +1,58 @@
+{
+  "slug": "absolute-difference",
+  "title": "Absolute difference",
+  "prompt": "Return the absolute difference between `a` and `b` without using `abs()`.",
+  "entry_point": "difference",
+  "concepts": [
+    "conditionals",
+    "operators"
+  ],
+  "public_tests": [
+    {
+      "label": "First larger",
+      "args": [
+        9,
+        4
+      ],
+      "expected": 5
+    },
+    {
+      "label": "Second larger",
+      "args": [
+        2,
+        7
+      ],
+      "expected": 5
+    },
+    {
+      "label": "Equal",
+      "args": [
+        3,
+        3
+      ],
+      "expected": 0
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Negatives",
+      "args": [
+        -5,
+        5
+      ],
+      "expected": 10
+    },
+    {
+      "label": "Both negative",
+      "args": [
+        -2,
+        -9
+      ],
+      "expected": 7
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "syntax",
+    "explanation": "Inconsistent indentation on the last line."
+  }
+}

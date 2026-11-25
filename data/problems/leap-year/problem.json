@@ -1,0 +1,53 @@
+{
+  "slug": "leap-year",
+  "title": "Leap year",
+  "prompt": "Return True if `year` is a leap year: divisible by 4, except century years, which must be divisible by 400.",
+  "entry_point": "is_leap",
+  "concepts": [
+    "conditionals",
+    "operators"
+  ],
+  "public_tests": [
+    {
+      "label": "Ordinary leap",
+      "args": [
+        2024
+      ],
+      "expected": true
+    },
+    {
+      "label": "Not leap",
+      "args": [
+        2023
+      ],
+      "expected": false
+    },
+    {
+      "label": "Year 2000",
+      "args": [
+        2000
+      ],
+      "expected": true
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Century non-leap",
+      "args": [
+        1900
+      ],
+      "expected": false
+    },
+    {
+      "label": "Year 2100",
+      "args": [
+        2100
+      ],
+      "expected": false
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "condition_logic",
+    "explanation": "Forgets the century rule."
+  }
+}

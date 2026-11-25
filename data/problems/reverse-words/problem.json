@@ -1,0 +1,53 @@
+{
+  "slug": "reverse-words",
+  "title": "Reverse word order",
+  "prompt": "Return `sentence` with its words in reverse order, separated by single spaces. Words are separated by one or more spaces.",
+  "entry_point": "reverse_words",
+  "concepts": [
+    "strings",
+    "arrays"
+  ],
+  "public_tests": [
+    {
+      "label": "Three words",
+      "args": [
+        "one two three"
+      ],
+      "expected": "three two one"
+    },
+    {
+      "label": "One word",
+      "args": [
+        "hello"
+      ],
+      "expected": "hello"
+    },
+    {
+      "label": "Two words",
+      "args": [
+        "good morning"
+      ],
+      "expected": "morning good"
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Extra spaces",
+      "args": [
+        "  a   b "
+      ],
+      "expected": "b a"
+    },
+    {
+      "label": "Empty",
+      "args": [
+        ""
+      ],
+      "expected": ""
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "edge_case",
+    "explanation": "Splitting on a single space keeps empty words when there are repeated spaces."
+  }
+}

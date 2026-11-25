@@ -1,0 +1,58 @@
+{
+  "slug": "anagram-check",
+  "title": "Anagram check",
+  "prompt": "Return True if `a` and `b` contain exactly the same letters the same number of times, ignoring case and spaces.",
+  "entry_point": "is_anagram",
+  "concepts": [
+    "hashing",
+    "strings"
+  ],
+  "public_tests": [
+    {
+      "label": "Anagram",
+      "args": [
+        "listen",
+        "silent"
+      ],
+      "expected": true
+    },
+    {
+      "label": "Different letters",
+      "args": [
+        "cat",
+        "dog"
+      ],
+      "expected": false
+    },
+    {
+      "label": "Case and spaces",
+      "args": [
+        "Dormitory",
+        "dirty room"
+      ],
+      "expected": true
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Different counts",
+      "args": [
+        "aab",
+        "abb"
+      ],
+      "expected": false
+    },
+    {
+      "label": "Empty strings",
+      "args": [
+        "",
+        ""
+      ],
+      "expected": true
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "edge_case",
+    "explanation": "Compares sets, so letter counts are ignored."
+  }
+}

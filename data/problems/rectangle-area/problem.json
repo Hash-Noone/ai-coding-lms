@@ -1,0 +1,59 @@
+{
+  "slug": "rectangle-area",
+  "title": "Rectangle area",
+  "prompt": "Return the area of a rectangle with the given `width` and `height`.",
+  "entry_point": "area",
+  "concepts": [
+    "functions",
+    "variables",
+    "operators"
+  ],
+  "public_tests": [
+    {
+      "label": "Square",
+      "args": [
+        3,
+        3
+      ],
+      "expected": 9
+    },
+    {
+      "label": "Wide",
+      "args": [
+        5,
+        2
+      ],
+      "expected": 10
+    },
+    {
+      "label": "Zero width",
+      "args": [
+        0,
+        7
+      ],
+      "expected": 0
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Large",
+      "args": [
+        100,
+        250
+      ],
+      "expected": 25000
+    },
+    {
+      "label": "Unit",
+      "args": [
+        1,
+        1
+      ],
+      "expected": 1
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "name_resolution",
+    "explanation": "Misspells height, raising NameError."
+  }
+}

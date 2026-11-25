@@ -1,0 +1,53 @@
+{
+  "slug": "capitalize-words",
+  "title": "Capitalize words",
+  "prompt": "Return `sentence` with the first letter of every word in uppercase and the rest in lowercase. Words are separated by single spaces.",
+  "entry_point": "capitalize_words",
+  "concepts": [
+    "strings",
+    "loops"
+  ],
+  "public_tests": [
+    {
+      "label": "Lowercase",
+      "args": [
+        "hello world"
+      ],
+      "expected": "Hello World"
+    },
+    {
+      "label": "Mixed case",
+      "args": [
+        "pYTHON rocks"
+      ],
+      "expected": "Python Rocks"
+    },
+    {
+      "label": "One word",
+      "args": [
+        "code"
+      ],
+      "expected": "Code"
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Empty string",
+      "args": [
+        ""
+      ],
+      "expected": ""
+    },
+    {
+      "label": "Double space",
+      "args": [
+        "a  b"
+      ],
+      "expected": "A  B"
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "index_or_key",
+    "explanation": "word[0] raises IndexError on an empty word."
+  }
+}

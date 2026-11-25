@@ -1,0 +1,53 @@
+{
+  "slug": "count-digits",
+  "title": "Count digits",
+  "prompt": "Return the number of digits in the integer `n`. The sign does not count, and 0 has one digit.",
+  "entry_point": "count_digits",
+  "concepts": [
+    "loops",
+    "operators"
+  ],
+  "public_tests": [
+    {
+      "label": "Three digits",
+      "args": [
+        123
+      ],
+      "expected": 3
+    },
+    {
+      "label": "One digit",
+      "args": [
+        7
+      ],
+      "expected": 1
+    },
+    {
+      "label": "Large number",
+      "args": [
+        100000
+      ],
+      "expected": 6
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Zero",
+      "args": [
+        0
+      ],
+      "expected": 1
+    },
+    {
+      "label": "Negative",
+      "args": [
+        -4567
+      ],
+      "expected": 4
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "edge_case",
+    "explanation": "Returns 0 for zero and for negative numbers."
+  }
+}
