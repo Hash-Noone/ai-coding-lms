@@ -1,0 +1,14 @@
+[
+  {"slug": "variables", "name": "Variables and assignment"},
+  {"slug": "types", "name": "Types and conversions"},
+  {"slug": "operators", "name": "Operators and expressions"},
+  {"slug": "conditionals", "name": "Conditionals"},
+  {"slug": "loops", "name": "Loops"},
+  {"slug": "strings", "name": "Strings"},
+  {"slug": "arrays", "name": "Arrays and lists"},
+  {"slug": "hashing", "name": "Hashing with dictionaries and sets"},
+  {"slug": "recursion", "name": "Recursion"},
+  {"slug": "functions", "name": "Functions"},
+  {"slug": "indexing", "name": "Indexing and slicing"},
+  {"slug": "exceptions", "name": "Exceptions"}
+]

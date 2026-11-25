@@ -1,0 +1,53 @@
+{
+  "slug": "fizzbuzz-value",
+  "title": "FizzBuzz value",
+  "prompt": "Return 'Fizz' if `n` is divisible by 3, 'Buzz' if divisible by 5, 'FizzBuzz' if divisible by both, otherwise the number as a string.",
+  "entry_point": "fizzbuzz",
+  "concepts": [
+    "conditionals",
+    "operators"
+  ],
+  "public_tests": [
+    {
+      "label": "Multiple of 3",
+      "args": [
+        9
+      ],
+      "expected": "Fizz"
+    },
+    {
+      "label": "Multiple of 5",
+      "args": [
+        10
+      ],
+      "expected": "Buzz"
+    },
+    {
+      "label": "Plain number",
+      "args": [
+        7
+      ],
+      "expected": "7"
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Multiple of 15",
+      "args": [
+        30
+      ],
+      "expected": "FizzBuzz"
+    },
+    {
+      "label": "Fifteen",
+      "args": [
+        15
+      ],
+      "expected": "FizzBuzz"
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "condition_logic",
+    "explanation": "Checks the divisible-by-15 case last, so it is never reached."
+  }
+}

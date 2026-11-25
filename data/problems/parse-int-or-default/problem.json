@@ -1,0 +1,58 @@
+{
+  "slug": "parse-int-or-default",
+  "title": "Parse integer with default",
+  "prompt": "Return `text` converted to an int. If it is not a valid integer, return `default` instead.",
+  "entry_point": "parse_int",
+  "concepts": [
+    "exceptions",
+    "types"
+  ],
+  "public_tests": [
+    {
+      "label": "Valid number",
+      "args": [
+        "42",
+        0
+      ],
+      "expected": 42
+    },
+    {
+      "label": "Not a number",
+      "args": [
+        "abc",
+        -1
+      ],
+      "expected": -1
+    },
+    {
+      "label": "Empty string",
+      "args": [
+        "",
+        7
+      ],
+      "expected": 7
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Negative number",
+      "args": [
+        "-15",
+        0
+      ],
+      "expected": -15
+    },
+    {
+      "label": "Padded",
+      "args": [
+        " 8 ",
+        0
+      ],
+      "expected": 8
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "edge_case",
+    "explanation": "isdigit() rejects negative numbers and surrounding whitespace that int() accepts."
+  }
+}

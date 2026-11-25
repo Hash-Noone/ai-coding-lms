@@ -1,0 +1,70 @@
+{
+  "slug": "is-even-pairs",
+  "title": "Count even-sum pairs",
+  "prompt": "Return how many adjacent pairs in `numbers` add up to an even number.",
+  "entry_point": "even_pairs",
+  "concepts": [
+    "arrays",
+    "operators",
+    "loops"
+  ],
+  "public_tests": [
+    {
+      "label": "Mixed",
+      "args": [
+        [
+          1,
+          3,
+          4,
+          6
+        ]
+      ],
+      "expected": 2
+    },
+    {
+      "label": "No pairs",
+      "args": [
+        [
+          5
+        ]
+      ],
+      "expected": 0
+    },
+    {
+      "label": "All odd",
+      "args": [
+        [
+          1,
+          1,
+          1
+        ]
+      ],
+      "expected": 2
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Alternating",
+      "args": [
+        [
+          1,
+          2,
+          1,
+          2
+        ]
+      ],
+      "expected": 0
+    },
+    {
+      "label": "Empty",
+      "args": [
+        []
+      ],
+      "expected": 0
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "syntax",
+    "explanation": "Missing the colon after the for statement."
+  }
+}

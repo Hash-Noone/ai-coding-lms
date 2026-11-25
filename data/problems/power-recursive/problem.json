@@ -1,0 +1,58 @@
+{
+  "slug": "power-recursive",
+  "title": "Recursive power",
+  "prompt": "Return `base` raised to the non-negative integer `exponent`, using recursion instead of `**` or `pow()`.",
+  "entry_point": "power",
+  "concepts": [
+    "recursion",
+    "functions"
+  ],
+  "public_tests": [
+    {
+      "label": "Two cubed",
+      "args": [
+        2,
+        3
+      ],
+      "expected": 8
+    },
+    {
+      "label": "Exponent zero",
+      "args": [
+        5,
+        0
+      ],
+      "expected": 1
+    },
+    {
+      "label": "Exponent one",
+      "args": [
+        7,
+        1
+      ],
+      "expected": 7
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Negative base",
+      "args": [
+        -2,
+        3
+      ],
+      "expected": -8
+    },
+    {
+      "label": "Ten squared",
+      "args": [
+        10,
+        2
+      ],
+      "expected": 100
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "function_contract",
+    "explanation": "Calls itself with the same exponent, so it never reaches the base case."
+  }
+}

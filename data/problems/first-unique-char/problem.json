@@ -1,0 +1,54 @@
+{
+  "slug": "first-unique-char",
+  "title": "First unique character",
+  "prompt": "Return the index of the first character in `text` that appears exactly once, or -1 if there is none.",
+  "entry_point": "first_unique",
+  "concepts": [
+    "hashing",
+    "strings",
+    "indexing"
+  ],
+  "public_tests": [
+    {
+      "label": "Unique first",
+      "args": [
+        "abcab"
+      ],
+      "expected": 2
+    },
+    {
+      "label": "All repeated",
+      "args": [
+        "aabb"
+      ],
+      "expected": -1
+    },
+    {
+      "label": "Single char",
+      "args": [
+        "z"
+      ],
+      "expected": 0
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Unique last",
+      "args": [
+        "aabbc"
+      ],
+      "expected": 4
+    },
+    {
+      "label": "Empty",
+      "args": [
+        ""
+      ],
+      "expected": -1
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "loop_logic",
+    "explanation": "Returns the first character it has not seen yet rather than one that never repeats."
+  }
+}

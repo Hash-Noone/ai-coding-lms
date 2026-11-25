@@ -1,0 +1,53 @@
+{
+  "slug": "factorial",
+  "title": "Factorial",
+  "prompt": "Return `n!` for a non-negative integer `n`, using recursion. `0!` is 1.",
+  "entry_point": "factorial",
+  "concepts": [
+    "recursion",
+    "functions"
+  ],
+  "public_tests": [
+    {
+      "label": "Five",
+      "args": [
+        5
+      ],
+      "expected": 120
+    },
+    {
+      "label": "One",
+      "args": [
+        1
+      ],
+      "expected": 1
+    },
+    {
+      "label": "Three",
+      "args": [
+        3
+      ],
+      "expected": 6
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Zero",
+      "args": [
+        0
+      ],
+      "expected": 1
+    },
+    {
+      "label": "Ten",
+      "args": [
+        10
+      ],
+      "expected": 3628800
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "edge_case",
+    "explanation": "The base case only handles 1, so factorial(0) recurses forever."
+  }
+}

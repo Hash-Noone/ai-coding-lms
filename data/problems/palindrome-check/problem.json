@@ -1,0 +1,53 @@
+{
+  "slug": "palindrome-check",
+  "title": "Palindrome check",
+  "prompt": "Return True if `text` reads the same forwards and backwards, ignoring case and any character that is not a letter or digit.",
+  "entry_point": "is_palindrome",
+  "concepts": [
+    "strings",
+    "indexing"
+  ],
+  "public_tests": [
+    {
+      "label": "Simple palindrome",
+      "args": [
+        "racecar"
+      ],
+      "expected": true
+    },
+    {
+      "label": "Not a palindrome",
+      "args": [
+        "python"
+      ],
+      "expected": false
+    },
+    {
+      "label": "Empty string",
+      "args": [
+        ""
+      ],
+      "expected": true
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Mixed case",
+      "args": [
+        "Level"
+      ],
+      "expected": true
+    },
+    {
+      "label": "Phrase with punctuation",
+      "args": [
+        "Was it a car, or a cat I saw?"
+      ],
+      "expected": true
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "edge_case",
+    "explanation": "Does not ignore case, spaces, or punctuation."
+  }
+}

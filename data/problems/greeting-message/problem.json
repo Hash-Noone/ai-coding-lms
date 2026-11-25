@@ -1,0 +1,58 @@
+{
+  "slug": "greeting-message",
+  "title": "Greeting message",
+  "prompt": "Return the string 'Hello, NAME! You are AGE.' using the given `name` and integer `age`.",
+  "entry_point": "greet",
+  "concepts": [
+    "strings",
+    "types"
+  ],
+  "public_tests": [
+    {
+      "label": "Adult",
+      "args": [
+        "Ada",
+        36
+      ],
+      "expected": "Hello, Ada! You are 36."
+    },
+    {
+      "label": "Child",
+      "args": [
+        "Sam",
+        9
+      ],
+      "expected": "Hello, Sam! You are 9."
+    },
+    {
+      "label": "Short name",
+      "args": [
+        "Al",
+        50
+      ],
+      "expected": "Hello, Al! You are 50."
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Zero age",
+      "args": [
+        "Newborn",
+        0
+      ],
+      "expected": "Hello, Newborn! You are 0."
+    },
+    {
+      "label": "Long name",
+      "args": [
+        "Grace Hopper",
+        85
+      ],
+      "expected": "Hello, Grace Hopper! You are 85."
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "type_mismatch",
+    "explanation": "Concatenates an int onto a string."
+  }
+}

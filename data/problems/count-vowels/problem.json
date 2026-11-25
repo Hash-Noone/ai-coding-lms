@@ -1,0 +1,53 @@
+{
+  "slug": "count-vowels",
+  "title": "Count vowels",
+  "prompt": "Return how many vowels (a, e, i, o, u, in either case) appear in `text`.",
+  "entry_point": "count_vowels",
+  "concepts": [
+    "strings",
+    "loops"
+  ],
+  "public_tests": [
+    {
+      "label": "Lowercase word",
+      "args": [
+        "banana"
+      ],
+      "expected": 3
+    },
+    {
+      "label": "No vowels",
+      "args": [
+        "rhythm"
+      ],
+      "expected": 0
+    },
+    {
+      "label": "Empty string",
+      "args": [
+        ""
+      ],
+      "expected": 0
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Uppercase vowels",
+      "args": [
+        "AEIOU"
+      ],
+      "expected": 5
+    },
+    {
+      "label": "Mixed case sentence",
+      "args": [
+        "Hello World"
+      ],
+      "expected": 3
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "edge_case",
+    "explanation": "Ignores uppercase vowels."
+  }
+}

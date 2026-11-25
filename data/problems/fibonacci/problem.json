@@ -1,0 +1,53 @@
+{
+  "slug": "fibonacci",
+  "title": "Fibonacci number",
+  "prompt": "Return the `n`th Fibonacci number, where fib(0) is 0 and fib(1) is 1.",
+  "entry_point": "fib",
+  "concepts": [
+    "recursion",
+    "loops"
+  ],
+  "public_tests": [
+    {
+      "label": "Zero",
+      "args": [
+        0
+      ],
+      "expected": 0
+    },
+    {
+      "label": "One",
+      "args": [
+        1
+      ],
+      "expected": 1
+    },
+    {
+      "label": "Ten",
+      "args": [
+        10
+      ],
+      "expected": 55
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Two",
+      "args": [
+        2
+      ],
+      "expected": 1
+    },
+    {
+      "label": "Twenty",
+      "args": [
+        20
+      ],
+      "expected": 6765
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "off_by_one",
+    "explanation": "Loops one time too few."
+  }
+}

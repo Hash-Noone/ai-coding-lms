@@ -1,0 +1,53 @@
+{
+  "slug": "celsius-to-fahrenheit",
+  "title": "Celsius to Fahrenheit",
+  "prompt": "Return the Fahrenheit equivalent of `celsius`, rounded to one decimal place. The formula is F = C * 9 / 5 + 32.",
+  "entry_point": "to_fahrenheit",
+  "concepts": [
+    "operators",
+    "types"
+  ],
+  "public_tests": [
+    {
+      "label": "Freezing",
+      "args": [
+        0
+      ],
+      "expected": 32.0
+    },
+    {
+      "label": "Boiling",
+      "args": [
+        100
+      ],
+      "expected": 212.0
+    },
+    {
+      "label": "Body temperature",
+      "args": [
+        37
+      ],
+      "expected": 98.6
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Negative forty",
+      "args": [
+        -40
+      ],
+      "expected": -40.0
+    },
+    {
+      "label": "Fraction",
+      "args": [
+        21.5
+      ],
+      "expected": 70.7
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "syntax",
+    "explanation": "Missing a closing parenthesis."
+  }
+}

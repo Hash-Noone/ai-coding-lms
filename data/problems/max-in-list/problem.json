@@ -1,0 +1,71 @@
+{
+  "slug": "max-in-list",
+  "title": "Largest number",
+  "prompt": "Return the largest number in the non-empty list `numbers` without using `max()`.",
+  "entry_point": "largest",
+  "concepts": [
+    "arrays",
+    "loops"
+  ],
+  "public_tests": [
+    {
+      "label": "Positive numbers",
+      "args": [
+        [
+          3,
+          9,
+          2
+        ]
+      ],
+      "expected": 9
+    },
+    {
+      "label": "Single item",
+      "args": [
+        [
+          5
+        ]
+      ],
+      "expected": 5
+    },
+    {
+      "label": "Largest first",
+      "args": [
+        [
+          8,
+          1,
+          4
+        ]
+      ],
+      "expected": 8
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "All negative",
+      "args": [
+        [
+          -5,
+          -2,
+          -9
+        ]
+      ],
+      "expected": -2
+    },
+    {
+      "label": "Duplicates",
+      "args": [
+        [
+          4,
+          4,
+          1
+        ]
+      ],
+      "expected": 4
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "state_management",
+    "explanation": "Starts the running maximum at 0, which is wrong when every number is negative."
+  }
+}

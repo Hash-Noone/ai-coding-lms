@@ -1,0 +1,107 @@
+{
+  "slug": "multiplication-table",
+  "title": "Multiplication table",
+  "prompt": "Return an `n` by `n` multiplication table as a list of rows, where row i column j holds (i + 1) * (j + 1).",
+  "entry_point": "times_table",
+  "concepts": [
+    "loops",
+    "arrays"
+  ],
+  "public_tests": [
+    {
+      "label": "Two by two",
+      "args": [
+        2
+      ],
+      "expected": [
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          4
+        ]
+      ]
+    },
+    {
+      "label": "One by one",
+      "args": [
+        1
+      ],
+      "expected": [
+        [
+          1
+        ]
+      ]
+    },
+    {
+      "label": "Empty",
+      "args": [
+        0
+      ],
+      "expected": []
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Three by three",
+      "args": [
+        3
+      ],
+      "expected": [
+        [
+          1,
+          2,
+          3
+        ],
+        [
+          2,
+          4,
+          6
+        ],
+        [
+          3,
+          6,
+          9
+        ]
+      ]
+    },
+    {
+      "label": "Four corner",
+      "args": [
+        4
+      ],
+      "expected": [
+        [
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          2,
+          4,
+          6,
+          8
+        ],
+        [
+          3,
+          6,
+          9,
+          12
+        ],
+        [
+          4,
+          8,
+          12,
+          16
+        ]
+      ]
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "state_management",
+    "explanation": "Reuses one row list for every row instead of creating a new one."
+  }
+}

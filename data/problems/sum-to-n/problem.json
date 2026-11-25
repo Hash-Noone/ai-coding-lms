@@ -1,0 +1,53 @@
+{
+  "slug": "sum-to-n",
+  "title": "Sum from 1 to n",
+  "prompt": "Return the sum of all integers from 1 to `n` inclusive using a loop. Return 0 when `n` is less than 1.",
+  "entry_point": "sum_to",
+  "concepts": [
+    "loops",
+    "variables"
+  ],
+  "public_tests": [
+    {
+      "label": "Five",
+      "args": [
+        5
+      ],
+      "expected": 15
+    },
+    {
+      "label": "One",
+      "args": [
+        1
+      ],
+      "expected": 1
+    },
+    {
+      "label": "Zero",
+      "args": [
+        0
+      ],
+      "expected": 0
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Hundred",
+      "args": [
+        100
+      ],
+      "expected": 5050
+    },
+    {
+      "label": "Negative",
+      "args": [
+        -3
+      ],
+      "expected": 0
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "off_by_one",
+    "explanation": "range(1, n) stops before n."
+  }
+}

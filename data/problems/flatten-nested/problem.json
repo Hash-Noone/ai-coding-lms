@@ -1,0 +1,93 @@
+{
+  "slug": "flatten-nested",
+  "title": "Flatten nested lists",
+  "prompt": "Return a flat list of every value in `items`, which may contain lists nested to any depth.",
+  "entry_point": "flatten",
+  "concepts": [
+    "recursion",
+    "arrays"
+  ],
+  "public_tests": [
+    {
+      "label": "One level",
+      "args": [
+        [
+          1,
+          [
+            2,
+            3
+          ]
+        ]
+      ],
+      "expected": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "label": "Already flat",
+      "args": [
+        [
+          1,
+          2
+        ]
+      ],
+      "expected": [
+        1,
+        2
+      ]
+    },
+    {
+      "label": "Empty",
+      "args": [
+        []
+      ],
+      "expected": []
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Deep nesting",
+      "args": [
+        [
+          1,
+          [
+            2,
+            [
+              3,
+              [
+                4
+              ]
+            ]
+          ]
+        ]
+      ],
+      "expected": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "label": "Empty inner lists",
+      "args": [
+        [
+          [],
+          [
+            []
+          ],
+          5
+        ]
+      ],
+      "expected": [
+        5
+      ]
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "edge_case",
+    "explanation": "Flattens only one level of nesting."
+  }
+}

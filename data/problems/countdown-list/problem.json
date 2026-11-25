@@ -1,0 +1,65 @@
+{
+  "slug": "countdown-list",
+  "title": "Countdown",
+  "prompt": "Return a list counting down from `n` to 1 using a while loop. Return an empty list when `n` is less than 1.",
+  "entry_point": "countdown",
+  "concepts": [
+    "loops",
+    "arrays"
+  ],
+  "public_tests": [
+    {
+      "label": "Three",
+      "args": [
+        3
+      ],
+      "expected": [
+        3,
+        2,
+        1
+      ]
+    },
+    {
+      "label": "One",
+      "args": [
+        1
+      ],
+      "expected": [
+        1
+      ]
+    },
+    {
+      "label": "Zero",
+      "args": [
+        0
+      ],
+      "expected": []
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Five",
+      "args": [
+        5
+      ],
+      "expected": [
+        5,
+        4,
+        3,
+        2,
+        1
+      ]
+    },
+    {
+      "label": "Negative",
+      "args": [
+        -2
+      ],
+      "expected": []
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "loop_logic",
+    "explanation": "Never decrements n, so the loop never ends."
+  }
+}

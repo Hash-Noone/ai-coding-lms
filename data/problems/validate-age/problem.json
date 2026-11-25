@@ -1,0 +1,54 @@
+{
+  "slug": "validate-age",
+  "title": "Validate age",
+  "prompt": "Return the integer age parsed from `text`, or None if `text` is not an integer or the age is outside 0-150.",
+  "entry_point": "validated_age",
+  "concepts": [
+    "exceptions",
+    "types",
+    "conditionals"
+  ],
+  "public_tests": [
+    {
+      "label": "Valid age",
+      "args": [
+        "30"
+      ],
+      "expected": 30
+    },
+    {
+      "label": "Not a number",
+      "args": [
+        "thirty"
+      ],
+      "expected": null
+    },
+    {
+      "label": "Upper bound",
+      "args": [
+        "150"
+      ],
+      "expected": 150
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Too old",
+      "args": [
+        "151"
+      ],
+      "expected": null
+    },
+    {
+      "label": "Negative",
+      "args": [
+        "-1"
+      ],
+      "expected": null
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "function_contract",
+    "explanation": "Returns False instead of None for an out-of-range age."
+  }
+}
