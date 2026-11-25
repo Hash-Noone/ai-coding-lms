@@ -25,7 +25,7 @@ A problem fails when:
 - `reference.py` fails any test,
 - `wrong.py` or the untouched `starter.py` passes every test,
 - a `syntax` wrong solution parses, or any other file does not,
-- the files define the entry point with different parameter counts,
+- `starter.py` or `wrong.py` defines the entry point with different parameters than `reference.py`,
 - test labels or argument lists repeat.
 
 The full run also fails if any concept or mistake type has no problem.
