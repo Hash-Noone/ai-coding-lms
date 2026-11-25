@@ -3,8 +3,8 @@ import type { PyodideInterface } from "pyodide";
 export type PublicTest = {
   id: string;
   label: string;
-  args: number[][];
-  expected: number;
+  args: unknown[];
+  expected: unknown;
 };
 
 export type TestResult = { id: string; passed: boolean; actual?: string; error?: string };
@@ -27,16 +27,42 @@ export function runPythonTests(pyodide: PyodideInterface, request: RunRequest): 
 import json
 import reprlib
 
+def values_equal(actual, expected):
+    if type(actual) is bool or type(expected) is bool:
+        return type(actual) is type(expected) and actual == expected
+    if isinstance(actual, (int, float)) and isinstance(expected, (int, float)):
+        return actual == expected
+    if type(actual) is not type(expected):
+        return False
+    if isinstance(actual, list):
+        return len(actual) == len(expected) and all(
+            values_equal(a, b) for a, b in zip(actual, expected)
+        )
+    if isinstance(actual, dict):
+        return actual.keys() == expected.keys() and all(
+            values_equal(actual[k], expected[k]) for k in actual
+        )
+    return actual == expected
+
 def run_test(case):
     namespace = {"__name__": "__main__"}
     try:
         exec(submission, namespace)
         actual = namespace[entry_point](*case["args"])
-        return {
-            "id": case["id"],
-            "passed": type(actual) is int and actual == case["expected"],
-            "actual": reprlib.repr(actual),
-        }
+        try:
+            normalized = json.loads(json.dumps(actual, allow_nan=False))
+            passed = values_equal(normalized, case["expected"])
+            return {
+                "id": case["id"],
+                "passed": passed,
+                "actual": reprlib.repr(actual),
+            }
+        except (TypeError, ValueError):
+            return {
+                "id": case["id"],
+                "passed": False,
+                "error": f"Returned a non-JSON value: {reprlib.repr(actual)}"[:500],
+            }
     except BaseException as error:
         return {
             "id": case["id"],
