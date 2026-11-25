@@ -1,0 +1,70 @@
+{
+  "slug": "score-tracker",
+  "title": "Score tracker",
+  "prompt": "`events` is a list of 'win' or 'loss' strings. Return the longest streak of consecutive wins.",
+  "entry_point": "longest_streak",
+  "concepts": [
+    "loops",
+    "variables",
+    "conditionals"
+  ],
+  "public_tests": [
+    {
+      "label": "Streak of two",
+      "args": [
+        [
+          "win",
+          "win",
+          "loss",
+          "win"
+        ]
+      ],
+      "expected": 2
+    },
+    {
+      "label": "No wins",
+      "args": [
+        [
+          "loss"
+        ]
+      ],
+      "expected": 0
+    },
+    {
+      "label": "Empty",
+      "args": [
+        []
+      ],
+      "expected": 0
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Later streak",
+      "args": [
+        [
+          "win",
+          "loss",
+          "win",
+          "win",
+          "win"
+        ]
+      ],
+      "expected": 3
+    },
+    {
+      "label": "All wins",
+      "args": [
+        [
+          "win",
+          "win"
+        ]
+      ],
+      "expected": 2
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "state_management",
+    "explanation": "Never resets the streak after a loss."
+  }
+}

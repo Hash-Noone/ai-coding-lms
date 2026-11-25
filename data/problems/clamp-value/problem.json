@@ -1,0 +1,63 @@
+{
+  "slug": "clamp-value",
+  "title": "Clamp a value",
+  "prompt": "Return `value` limited to the range from `low` to `high` inclusive.",
+  "entry_point": "clamp",
+  "concepts": [
+    "conditionals",
+    "functions"
+  ],
+  "public_tests": [
+    {
+      "label": "Below range",
+      "args": [
+        -5,
+        0,
+        10
+      ],
+      "expected": 0
+    },
+    {
+      "label": "Above range",
+      "args": [
+        15,
+        0,
+        10
+      ],
+      "expected": 10
+    },
+    {
+      "label": "Inside range",
+      "args": [
+        4,
+        0,
+        10
+      ],
+      "expected": 4
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "At low edge",
+      "args": [
+        0,
+        0,
+        10
+      ],
+      "expected": 0
+    },
+    {
+      "label": "At high edge",
+      "args": [
+        10,
+        0,
+        10
+      ],
+      "expected": 10
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "function_contract",
+    "explanation": "Forgets to return the value when it is already in range."
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "slug": "max-word-length",
+  "title": "Longest word length",
+  "prompt": "Return the length of the longest word in `sentence`, or 0 if there are no words.",
+  "entry_point": "longest_word",
+  "concepts": [
+    "strings",
+    "loops",
+    "variables"
+  ],
+  "public_tests": [
+    {
+      "label": "Two words",
+      "args": [
+        "hello there"
+      ],
+      "expected": 5
+    },
+    {
+      "label": "Longest last",
+      "args": [
+        "a bb ccc"
+      ],
+      "expected": 3
+    },
+    {
+      "label": "Longest first",
+      "args": [
+        "python is fun"
+      ],
+      "expected": 6
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Empty sentence",
+      "args": [
+        ""
+      ],
+      "expected": 0
+    },
+    {
+      "label": "One word",
+      "args": [
+        "supercalifragilistic"
+      ],
+      "expected": 20
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "name_resolution",
+    "explanation": "longest is only assigned inside the loop, so an empty sentence raises an UnboundLocalError (and the value resets each word)."
+  }
+}

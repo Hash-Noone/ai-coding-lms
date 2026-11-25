@@ -1,0 +1,76 @@
+{
+  "slug": "nth-from-end",
+  "title": "Nth item from the end",
+  "prompt": "Return the item `n` positions from the end of `items`, where n = 1 is the last item. Return None if `n` is out of range.",
+  "entry_point": "nth_from_end",
+  "concepts": [
+    "indexing",
+    "arrays"
+  ],
+  "public_tests": [
+    {
+      "label": "Last",
+      "args": [
+        [
+          1,
+          2,
+          3
+        ],
+        1
+      ],
+      "expected": 3
+    },
+    {
+      "label": "First",
+      "args": [
+        [
+          1,
+          2,
+          3
+        ],
+        3
+      ],
+      "expected": 1
+    },
+    {
+      "label": "Out of range",
+      "args": [
+        [
+          1
+        ],
+        2
+      ],
+      "expected": null
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Zero",
+      "args": [
+        [
+          1,
+          2
+        ],
+        0
+      ],
+      "expected": null
+    },
+    {
+      "label": "Middle",
+      "args": [
+        [
+          "a",
+          "b",
+          "c",
+          "d"
+        ],
+        2
+      ],
+      "expected": "c"
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "off_by_one",
+    "explanation": "Subtracts one too many from the index."
+  }
+}

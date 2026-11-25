@@ -1,0 +1,81 @@
+{
+  "slug": "last-n-items",
+  "title": "Last n items",
+  "prompt": "Return a list of the last `n` items of `items`. If `n` is 0, return an empty list. If `n` is larger than the list, return the whole list.",
+  "entry_point": "last_n",
+  "concepts": [
+    "indexing",
+    "arrays"
+  ],
+  "public_tests": [
+    {
+      "label": "Last two",
+      "args": [
+        [
+          1,
+          2,
+          3,
+          4
+        ],
+        2
+      ],
+      "expected": [
+        3,
+        4
+      ]
+    },
+    {
+      "label": "Whole list",
+      "args": [
+        [
+          1,
+          2
+        ],
+        5
+      ],
+      "expected": [
+        1,
+        2
+      ]
+    },
+    {
+      "label": "Last one",
+      "args": [
+        [
+          "a",
+          "b"
+        ],
+        1
+      ],
+      "expected": [
+        "b"
+      ]
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Zero items",
+      "args": [
+        [
+          1,
+          2,
+          3
+        ],
+        0
+      ],
+      "expected": []
+    },
+    {
+      "label": "Empty list",
+      "args": [
+        [],
+        3
+      ],
+      "expected": []
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "edge_case",
+    "explanation": "items[-0:] is the whole list, so n = 0 returns every item."
+  }
+}

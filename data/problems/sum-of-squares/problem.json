@@ -1,0 +1,53 @@
+{
+  "slug": "sum-of-squares",
+  "title": "Sum of squares",
+  "prompt": "Return the sum of the squares of the integers from 1 to `n`.",
+  "entry_point": "sum_squares",
+  "concepts": [
+    "loops",
+    "operators"
+  ],
+  "public_tests": [
+    {
+      "label": "Three",
+      "args": [
+        3
+      ],
+      "expected": 14
+    },
+    {
+      "label": "One",
+      "args": [
+        1
+      ],
+      "expected": 1
+    },
+    {
+      "label": "Zero",
+      "args": [
+        0
+      ],
+      "expected": 0
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Ten",
+      "args": [
+        10
+      ],
+      "expected": 385
+    },
+    {
+      "label": "Five",
+      "args": [
+        5
+      ],
+      "expected": 55
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "syntax",
+    "explanation": "Has an extra closing parenthesis."
+  }
+}

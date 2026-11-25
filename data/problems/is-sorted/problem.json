@@ -1,0 +1,71 @@
+{
+  "slug": "is-sorted",
+  "title": "Is the list sorted",
+  "prompt": "Return True if `numbers` is in non-decreasing order.",
+  "entry_point": "is_sorted",
+  "concepts": [
+    "arrays",
+    "loops",
+    "indexing"
+  ],
+  "public_tests": [
+    {
+      "label": "Sorted",
+      "args": [
+        [
+          1,
+          2,
+          3
+        ]
+      ],
+      "expected": true
+    },
+    {
+      "label": "Unsorted at start",
+      "args": [
+        [
+          2,
+          1,
+          3
+        ]
+      ],
+      "expected": false
+    },
+    {
+      "label": "Empty",
+      "args": [
+        []
+      ],
+      "expected": true
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Unsorted at end",
+      "args": [
+        [
+          1,
+          2,
+          5,
+          4
+        ]
+      ],
+      "expected": false
+    },
+    {
+      "label": "Equal values",
+      "args": [
+        [
+          3,
+          3,
+          3
+        ]
+      ],
+      "expected": true
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "loop_logic",
+    "explanation": "Returns True after comparing only the first pair."
+  }
+}

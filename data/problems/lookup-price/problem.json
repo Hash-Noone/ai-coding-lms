@@ -1,0 +1,78 @@
+{
+  "slug": "lookup-price",
+  "title": "Price lookup",
+  "prompt": "`prices` maps item names to prices. Return the total price of `items`, skipping any item not in `prices`.",
+  "entry_point": "order_total",
+  "concepts": [
+    "hashing",
+    "loops"
+  ],
+  "public_tests": [
+    {
+      "label": "Known items",
+      "args": [
+        {
+          "tea": 2,
+          "cake": 5
+        },
+        [
+          "tea",
+          "cake"
+        ]
+      ],
+      "expected": 7
+    },
+    {
+      "label": "Repeat item",
+      "args": [
+        {
+          "tea": 2
+        },
+        [
+          "tea",
+          "tea"
+        ]
+      ],
+      "expected": 4
+    },
+    {
+      "label": "No items",
+      "args": [
+        {
+          "tea": 2
+        },
+        []
+      ],
+      "expected": 0
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Unknown item",
+      "args": [
+        {
+          "tea": 2
+        },
+        [
+          "tea",
+          "pie"
+        ]
+      ],
+      "expected": 2
+    },
+    {
+      "label": "Only unknown",
+      "args": [
+        {},
+        [
+          "pie"
+        ]
+      ],
+      "expected": 0
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "index_or_key",
+    "explanation": "Looks up every item, raising KeyError for unknown ones."
+  }
+}

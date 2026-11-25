@@ -1,0 +1,63 @@
+{
+  "slug": "word-frequencies",
+  "title": "Word frequencies",
+  "prompt": "Return a dictionary mapping each lowercase word in `text` to how many times it appears. Words are separated by whitespace.",
+  "entry_point": "word_counts",
+  "concepts": [
+    "hashing",
+    "strings"
+  ],
+  "public_tests": [
+    {
+      "label": "Repeated word",
+      "args": [
+        "the cat the"
+      ],
+      "expected": {
+        "the": 2,
+        "cat": 1
+      }
+    },
+    {
+      "label": "Single word",
+      "args": [
+        "hi"
+      ],
+      "expected": {
+        "hi": 1
+      }
+    },
+    {
+      "label": "Empty text",
+      "args": [
+        ""
+      ],
+      "expected": {}
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Mixed case",
+      "args": [
+        "Go go GO"
+      ],
+      "expected": {
+        "go": 3
+      }
+    },
+    {
+      "label": "Many spaces",
+      "args": [
+        "a  b\na"
+      ],
+      "expected": {
+        "a": 2,
+        "b": 1
+      }
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "index_or_key",
+    "explanation": "Increments a key before it exists, raising KeyError."
+  }
+}

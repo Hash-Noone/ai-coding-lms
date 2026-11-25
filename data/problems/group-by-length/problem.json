@@ -1,0 +1,91 @@
+{
+  "slug": "group-by-length",
+  "title": "Group words by length",
+  "prompt": "Return a dictionary mapping each word length to the list of words of that length, in their original order. Keys are the lengths as strings.",
+  "entry_point": "group_by_length",
+  "concepts": [
+    "hashing",
+    "strings"
+  ],
+  "public_tests": [
+    {
+      "label": "Mixed lengths",
+      "args": [
+        [
+          "a",
+          "bb",
+          "c"
+        ]
+      ],
+      "expected": {
+        "1": [
+          "a",
+          "c"
+        ],
+        "2": [
+          "bb"
+        ]
+      }
+    },
+    {
+      "label": "One word",
+      "args": [
+        [
+          "hey"
+        ]
+      ],
+      "expected": {
+        "3": [
+          "hey"
+        ]
+      }
+    },
+    {
+      "label": "No words",
+      "args": [
+        []
+      ],
+      "expected": {}
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Same length",
+      "args": [
+        [
+          "ab",
+          "cd",
+          "ef"
+        ]
+      ],
+      "expected": {
+        "2": [
+          "ab",
+          "cd",
+          "ef"
+        ]
+      }
+    },
+    {
+      "label": "Empty word",
+      "args": [
+        [
+          "",
+          "x"
+        ]
+      ],
+      "expected": {
+        "0": [
+          ""
+        ],
+        "1": [
+          "x"
+        ]
+      }
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "state_management",
+    "explanation": "Replaces the group list each time instead of appending to it."
+  }
+}

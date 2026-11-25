@@ -1,0 +1,59 @@
+{
+  "slug": "char-at-safe",
+  "title": "Character at position",
+  "prompt": "Return the character of `text` at index `i`, or an empty string if `i` is out of range. Negative indexes count from the end, as in Python.",
+  "entry_point": "char_at",
+  "concepts": [
+    "indexing",
+    "strings",
+    "exceptions"
+  ],
+  "public_tests": [
+    {
+      "label": "First",
+      "args": [
+        "hello",
+        0
+      ],
+      "expected": "h"
+    },
+    {
+      "label": "Last by negative index",
+      "args": [
+        "hello",
+        -1
+      ],
+      "expected": "o"
+    },
+    {
+      "label": "Far out of range",
+      "args": [
+        "hi",
+        10
+      ],
+      "expected": ""
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Just past the end",
+      "args": [
+        "abc",
+        3
+      ],
+      "expected": ""
+    },
+    {
+      "label": "Too negative",
+      "args": [
+        "abc",
+        -4
+      ],
+      "expected": ""
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "index_or_key",
+    "explanation": "Allows i equal to len(text), which raises IndexError."
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "slug": "safe-divide",
+  "title": "Safe division",
+  "prompt": "Return `a / b`. If `b` is zero, return None instead of raising an error.",
+  "entry_point": "safe_divide",
+  "concepts": [
+    "exceptions",
+    "operators"
+  ],
+  "public_tests": [
+    {
+      "label": "Even division",
+      "args": [
+        10,
+        2
+      ],
+      "expected": 5.0
+    },
+    {
+      "label": "Fraction",
+      "args": [
+        1,
+        4
+      ],
+      "expected": 0.25
+    },
+    {
+      "label": "Zero divisor",
+      "args": [
+        3,
+        0
+      ],
+      "expected": null
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Zero numerator",
+      "args": [
+        0,
+        5
+      ],
+      "expected": 0.0
+    },
+    {
+      "label": "Negative divisor",
+      "args": [
+        9,
+        -3
+      ],
+      "expected": -3.0
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "function_contract",
+    "explanation": "Returns 0 instead of None when dividing by zero."
+  }
+}

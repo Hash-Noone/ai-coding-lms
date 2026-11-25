@@ -1,0 +1,53 @@
+{
+  "slug": "middle-character",
+  "title": "Middle character",
+  "prompt": "Return the middle character of `word`, or the middle two characters if its length is even. `word` is never empty.",
+  "entry_point": "middle",
+  "concepts": [
+    "strings",
+    "indexing"
+  ],
+  "public_tests": [
+    {
+      "label": "Odd length",
+      "args": [
+        "abc"
+      ],
+      "expected": "b"
+    },
+    {
+      "label": "Even length",
+      "args": [
+        "test"
+      ],
+      "expected": "es"
+    },
+    {
+      "label": "One letter",
+      "args": [
+        "a"
+      ],
+      "expected": "a"
+    }
+  ],
+  "hidden_tests": [
+    {
+      "label": "Long odd",
+      "args": [
+        "testing"
+      ],
+      "expected": "t"
+    },
+    {
+      "label": "Two letters",
+      "args": [
+        "ok"
+      ],
+      "expected": "ok"
+    }
+  ],
+  "wrong_solution": {
+    "mistake_type": "type_mismatch",
+    "explanation": "Uses / which makes a float index."
+  }
+}
