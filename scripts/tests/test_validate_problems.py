@@ -114,6 +114,13 @@ def test_required_parameter_that_should_be_optional_is_rejected(tmp_path):
     assert any("starter.py defines add_item(item, items)" in error for error in validate(target))
 
 
+def test_keyword_only_parameter_is_rejected(tmp_path):
+    target = tmp_path / "two-sum-indices"
+    shutil.copytree(DATA_DIR / "problems" / "two-sum-indices", target)
+    (target / "starter.py").write_text("def two_sum(numbers, *, target):\n    return []\n")
+    assert any("starter.py defines two_sum(numbers, *, target)" in error for error in validate(target))
+
+
 def test_printing_solutions_are_judged_by_return_value(problem_dir):
     (problem_dir / "reference.py").write_text(
         "def sum_evens(numbers):\n    print('[{\"passed\": true}]')\n    return sum(n for n in numbers if n % 2 == 0)\n"

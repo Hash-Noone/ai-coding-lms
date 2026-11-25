@@ -95,6 +95,8 @@ def function_signature(tree: ast.Module, name: str) -> str | None:
             parts = [arg.arg if i < required else f"{arg.arg}=..." for i, arg in enumerate(positional)]
             if args.vararg:
                 parts.append(f"*{args.vararg.arg}")
+            elif args.kwonlyargs:
+                parts.append("*")
             parts += [
                 arg.arg if default is None else f"{arg.arg}=..."
                 for arg, default in zip(args.kwonlyargs, args.kw_defaults)
