@@ -42,6 +42,7 @@ def on_timeout(signum, frame):
     raise TimeoutError("test exceeded the time limit")
 
 request = json.load(sys.stdin)
+results_out, sys.stdout = sys.stdout, sys.stderr
 signal.signal(signal.SIGALRM, on_timeout)
 results = []
 for test in request["tests"]:
@@ -60,7 +61,7 @@ for test in request["tests"]:
     finally:
         signal.setitimer(signal.ITIMER_REAL, 0)
     results.append(result)
-sys.stdout.write(json.dumps(results))
+results_out.write(json.dumps(results))
 """
 
 

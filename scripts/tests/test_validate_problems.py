@@ -107,6 +107,14 @@ def test_signature_mismatch_is_rejected(problem_dir):
     assert any("starter.py sum_evens() takes" in error for error in validate(problem_dir))
 
 
+def test_printing_solutions_are_judged_by_return_value(problem_dir):
+    (problem_dir / "reference.py").write_text(
+        "def sum_evens(numbers):\n    print('[{\"passed\": true}]')\n    return sum(n for n in numbers if n % 2 == 0)\n"
+    )
+    (problem_dir / "wrong.py").write_text("def sum_evens(numbers):\n    print('[{\"passed\": true}]' * 5)\n    return 0\n")
+    assert validate(problem_dir) == []
+
+
 def test_missing_concept_coverage_is_reported():
     problem = json.loads((EXAMPLE / "problem.json").read_text())
     errors = validate_problems.check_coverage([problem], CONCEPTS, MISTAKES)
