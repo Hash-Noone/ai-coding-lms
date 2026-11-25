@@ -27,8 +27,22 @@ export function runPythonTests(pyodide: PyodideInterface, request: RunRequest): 
 import json
 import reprlib
 
-def canonical(value):
-    return json.dumps(value, sort_keys=True, allow_nan=False)
+def values_equal(actual, expected):
+    if type(actual) is bool or type(expected) is bool:
+        return type(actual) is type(expected) and actual == expected
+    if isinstance(actual, (int, float)) and isinstance(expected, (int, float)):
+        return actual == expected
+    if type(actual) is not type(expected):
+        return False
+    if isinstance(actual, list):
+        return len(actual) == len(expected) and all(
+            values_equal(a, b) for a, b in zip(actual, expected)
+        )
+    if isinstance(actual, dict):
+        return actual.keys() == expected.keys() and all(
+            values_equal(actual[k], expected[k]) for k in actual
+        )
+    return actual == expected
 
 def run_test(case):
     namespace = {"__name__": "__main__"}
@@ -36,7 +50,8 @@ def run_test(case):
         exec(submission, namespace)
         actual = namespace[entry_point](*case["args"])
         try:
-            passed = canonical(actual) == canonical(case["expected"])
+            normalized = json.loads(json.dumps(actual, allow_nan=False))
+            passed = values_equal(normalized, case["expected"])
             return {
                 "id": case["id"],
                 "passed": passed,

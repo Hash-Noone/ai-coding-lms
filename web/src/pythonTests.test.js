@@ -43,7 +43,7 @@ it("reports Python errors per test and isolates learner globals", () => {
   expect(namespaceCheck.map(({ actual }) => actual)).toEqual(["1", "1", "1"]);
 });
 
-it("compares booleans, strings, lists, and dicts by canonical JSON without conflating bool and int", () => {
+it("compares booleans, floats, strings, lists, and dicts without conflating bool and int", () => {
   const results = runPythonTests(pyodide, {
     code: "def check(x): return x",
     entryPoint: "check",
@@ -59,5 +59,18 @@ it("compares booleans, strings, lists, and dicts by canonical JSON without confl
     { id: "bool-vs-int", passed: false, actual: "1" },
     { id: "dict-order", passed: true, actual: "{'a': 1, 'b': 2}" },
     { id: "str", passed: true, actual: "'hi'" },
+  ]);
+
+  const floatResults = runPythonTests(pyodide, {
+    code: "def avg(xs): return float(sum(xs) / len(xs)) if xs else 0.0",
+    entryPoint: "avg",
+    tests: [
+      { id: "whole-float", label: "whole float", args: [[80, 90, 100]], expected: 90 },
+      { id: "zero-float", label: "zero float", args: [[]], expected: 0 },
+    ],
+  });
+  expect(floatResults).toEqual([
+    { id: "whole-float", passed: true, actual: "90.0" },
+    { id: "zero-float", passed: true, actual: "0.0" },
   ]);
 });
