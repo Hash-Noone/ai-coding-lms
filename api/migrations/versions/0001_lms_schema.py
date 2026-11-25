@@ -45,9 +45,9 @@ def upgrade() -> None:
             ('conditionals', 'Conditionals'),
             ('loops', 'Loops'),
             ('strings', 'Strings'),
-            ('lists', 'Lists'),
-            ('dictionaries', 'Dictionaries'),
-            ('sets', 'Sets'),
+            ('arrays', 'Arrays and lists'),
+            ('hashing', 'Hashing with dictionaries and sets'),
+            ('recursion', 'Recursion'),
             ('functions', 'Functions'),
             ('indexing', 'Indexing and slicing'),
             ('exceptions', 'Exceptions');

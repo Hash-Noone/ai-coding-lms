@@ -9,6 +9,7 @@
     {"id": "condition_logic", "description": "A branch condition behaves incorrectly for some inputs."},
     {"id": "loop_logic", "description": "Iteration, termination, or state updates inside a loop are incorrect."},
     {"id": "function_contract", "description": "A function receives the wrong arguments or returns the wrong result."},
+    {"id": "state_management", "description": "A value is initialized, reset, or mutated at the wrong point."},
     {"id": "edge_case", "description": "The code fails on a special input not covered by a more specific category."}
   ]
 }

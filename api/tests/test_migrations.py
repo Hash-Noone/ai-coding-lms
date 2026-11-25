@@ -47,7 +47,9 @@ def test_migration_lifecycle(postgres):
     """).scalars())
     assert TABLES | {"alembic_version"} <= rls_tables
     assert sql("SELECT id FROM public.users").scalar_one() == existing_user
-    assert sql("SELECT count(*) FROM public.concepts").scalar_one() == 12
+    concept_slugs = set(sql("SELECT slug FROM public.concepts").scalars())
+    assert len(concept_slugs) == 12
+    assert {"arrays", "hashing", "loops", "recursion"} <= concept_slugs
 
     sql("CREATE ROLE lms_test_authenticated NOLOGIN")
     sql("GRANT USAGE ON SCHEMA auth, public TO lms_test_authenticated")

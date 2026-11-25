@@ -61,7 +61,13 @@ Use an empty PostgreSQL 16+ test database rather than a Supabase or production d
 TEST_DATABASE_URL=postgresql://postgres:lms_test@127.0.0.1:5432/lms_test python -m pytest
 ```
 
-The test uses a minimal `auth.users` stub and rolls back its changes. To apply migrations manually on a fresh plain Postgres database, first load the stub with `psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/fixtures/supabase_auth.sql`. Then run `alembic upgrade head`. To undo all LMS migrations in a disposable database, run `alembic downgrade base` (this deletes LMS data, but leaves Auth users intact).
+The test uses a minimal `auth.users` stub and rolls back its changes. To build the LMS schema and seed data on a fresh, empty plain Postgres database in one command, run from `api/`:
+
+```sh
+DATABASE_URL=postgresql://postgres:lms_test@127.0.0.1:5432/lms_test alembic -x local_auth_stub=true upgrade head
+```
+
+The stub is for local database testing only; it does not provide sign-in. On Supabase, use `alembic upgrade head` without the stub flag. To undo all LMS migrations in a disposable database, run `alembic downgrade base` (this deletes LMS data, but leaves Auth users intact).
 
 ## Planned architecture
 

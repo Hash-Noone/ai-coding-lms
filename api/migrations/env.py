@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from alembic import context
 from sqlalchemy import create_engine, pool
 from sqlalchemy.engine import make_url
@@ -26,5 +28,8 @@ else:
             context.run_migrations()
     else:
         engine = create_engine(url, poolclass=pool.NullPool)
-        with engine.connect() as connection:
+        with engine.begin() as connection:
+            if context.get_x_argument(as_dictionary=True).get("local_auth_stub") == "true":
+                fixture = Path(__file__).resolve().parent.parent / "tests/fixtures/supabase_auth.sql"
+                connection.exec_driver_sql(fixture.read_text())
             run_migrations(connection)
