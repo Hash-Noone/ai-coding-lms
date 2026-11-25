@@ -1,10 +1,9 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import type { BankProblem, CuratedResource } from "virtual:problem-bank";
-import { postAttempt } from "./attempts";
+import { postAttempt, type StaticFinding } from "./attempts";
 import { createPythonRunner, RUN_TIMEOUT_MS, type RunnerState, type RunOutcome } from "./pythonRunner";
 
 const PythonEditor = lazy(() => import("./PythonEditor"));
-const apiUrl = import.meta.env.VITE_API_URL?.trim();
 
 function draftKey(slug: string): string {
   return `ai-coding-lms:draft:${slug}`;
@@ -58,6 +57,7 @@ export function ProblemView({
   onSolved?: (slug: string) => void;
   accessToken?: string;
 }) {
+  const apiUrl = import.meta.env.VITE_API_URL?.trim();
   const [initialCode, setInitialCode] = useState(() => loadDraft(problem.slug, problem.starterCode));
   const [code, setCode] = useState(initialCode);
   const [resetCount, setResetCount] = useState(0);
@@ -65,6 +65,7 @@ export function ProblemView({
   const [runnerState, setRunnerState] = useState<RunnerState>("idle");
   const [outcome, setOutcome] = useState<RunOutcome>();
   const [saveStatus, setSaveStatus] = useState("");
+  const [findings, setFindings] = useState<StaticFinding[]>([]);
   const runner = useRef<ReturnType<typeof createPythonRunner> | null>(null);
   const runSequence = useRef(0);
 
@@ -83,6 +84,7 @@ export function ProblemView({
     const sequence = ++runSequence.current;
     setOutcome(undefined);
     setSaveStatus("");
+    setFindings([]);
     const result = await instance.run({
       code,
       entryPoint: problem.entryPoint,
@@ -96,21 +98,24 @@ export function ProblemView({
       if (allPassed) onSolved?.(problem.slug);
     }
 
-    if (result.status !== "completed" || !apiUrl || !accessToken) return;
+    if (!apiUrl || !accessToken) return;
 
     setSaveStatus("Saving attempt…");
-    let message: string;
     try {
-      await postAttempt(apiUrl, accessToken, {
+      const saved = await postAttempt(apiUrl, accessToken, {
         problem_slug: problem.slug,
         code,
-        test_results: result.results,
+        test_results: result.status === "completed" ? result.results : [],
       });
-      message = "Attempt saved.";
+      if (runner.current === instance && runSequence.current === sequence) {
+        setSaveStatus("Attempt saved.");
+        setFindings(saved.static_findings);
+      }
     } catch {
-      message = "Could not save this attempt. Your test results are still available here.";
+      if (runner.current === instance && runSequence.current === sequence) {
+        setSaveStatus("Could not save this attempt. Your run is still available here.");
+      }
     }
-    if (runner.current === instance && runSequence.current === sequence) setSaveStatus(message);
   }
 
   const handleCodeChange = useCallback(
@@ -122,11 +127,13 @@ export function ProblemView({
   );
 
   function resetStarter() {
+    runSequence.current++;
     saveDraft(problem.slug, problem.starterCode, problem.starterCode);
     setInitialCode(problem.starterCode);
     setCode(problem.starterCode);
     setOutcome(undefined);
     setSaveStatus("");
+    setFindings([]);
     setResetCount((n) => n + 1);
   }
 
@@ -247,6 +254,19 @@ export function ProblemView({
             )
           )}
           {saveStatus && <p role="status">{saveStatus}</p>}
+          {findings.length > 0 && (
+            <>
+              <h3>Static checks</h3>
+              <ul className="test-results">
+                {findings.map((finding, index) => (
+                  <li key={index}>
+                    {finding.line !== undefined && `Line ${finding.line}: `}
+                    {finding.message} ({finding.code})
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
         </div>
       </div>
     </section>
