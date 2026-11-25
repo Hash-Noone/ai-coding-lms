@@ -1,4 +1,3 @@
-import ast
 import json
 import subprocess
 import sys
@@ -8,7 +7,7 @@ from pydantic import BaseModel
 
 
 class StaticFinding(BaseModel):
-    source: Literal["ast", "ruff"]
+    source: Literal["ruff"]
     code: str
     message: str
     line: int | None
@@ -16,23 +15,11 @@ class StaticFinding(BaseModel):
 
 
 def check_code(code: str) -> list[StaticFinding]:
-    try:
-        ast.parse(code)
-    except SyntaxError as exc:
-        return [
-            StaticFinding(
-                source="ast",
-                code="syntax-error",
-                message=exc.msg,
-                line=exc.lineno,
-                column=exc.offset if exc.offset and exc.offset > 0 else None,
-            )
-        ]
-
     result = subprocess.run(
         [
             sys.executable, "-I", "-m", "ruff", "check",
             "--isolated", "--no-cache", "--output-format", "json",
+            "--target-version", "py314",  # Match the Python version in the browser's Pyodide runtime.
             "--select", "E4,E7,E9,F", "--stdin-filename", "submission.py", "-",
         ],
         input=code,

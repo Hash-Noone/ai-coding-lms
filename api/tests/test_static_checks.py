@@ -2,10 +2,10 @@ from app.static_checks import check_code
 
 
 def test_reports_python_syntax_error():
-    finding, = check_code("def solution(:\n")
+    finding, *_ = check_code("def solution(:\n")
 
-    assert finding.source == "ast"
-    assert finding.code == "syntax-error"
+    assert finding.source == "ruff"
+    assert finding.code == "invalid-syntax"
     assert finding.message
     assert finding.line == 1
     assert finding.column == 14
@@ -20,3 +20,7 @@ def test_reports_ruff_findings_without_running_code():
 
 def test_clean_solution_has_no_findings():
     assert check_code("def add(x, y):\n    return x + y\n") == []
+
+
+def test_accepts_python_314_template_strings():
+    assert check_code('message = t"Hello {1 + 2}"\n') == []

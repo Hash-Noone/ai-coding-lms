@@ -1,7 +1,7 @@
 import type { TestResult } from "./pythonTests";
 
 export type StaticFinding = {
-  source: "ast" | "ruff";
+  source: "ruff";
   code: string;
   message: string;
   line?: number;

@@ -43,7 +43,7 @@ python -m uvicorn app.main:app --reload
 
 Check [http://localhost:8000/health](http://localhost:8000/health). From `api/` with the environment active, run `ruff check .` and `python -m pytest`.
 
-The authenticated routes are `GET /problems`, `GET /problems/{id}` (where `id` is the bank slug), and `POST /attempts`. The catalog reads the checked-in `data/problems` directory and exposes only public tests. On the first saved run for a slug, the API adds the corresponding problem to Postgres if needed. The API verifies the session with Supabase, saves the browser-reported results, and returns the attempt ID, test results and findings from Python's AST parser and Ruff. It never executes the submitted Python or calls an LLM, and the browser's results are not a trusted grade.
+The authenticated routes are `GET /problems`, `GET /problems/{id}` (where `id` is the bank slug), and `POST /attempts`. The catalog reads the checked-in `data/problems` directory and exposes only public tests. On the first saved run for a slug, the API adds the corresponding problem to Postgres if needed. The API verifies the session with Supabase, saves the browser-reported results, and returns the attempt ID, test results and Ruff syntax and lint findings for the browser runner's Python version (3.14). It never executes the submitted Python or calls an LLM, and the browser's results are not a trusted grade.
 
 ### Local configuration
 
@@ -80,7 +80,7 @@ The stub is for local database testing only; it does not provide sign-in. On Sup
 | Component | Plan |
 | --- | --- |
 | Web app | React or Next.js with Monaco Editor. Pyodide runs learner code and public tests in a Web Worker. The page shows a loading state on first download and replaces the worker on timeout so an infinite loop cannot freeze the page. |
-| API | FastAPI serves problems, records attempts, and returns structured findings from Python's `ast` parser and a linter such as Ruff. The LLM gateway runs only on the API. |
+| API | FastAPI serves problems, records attempts, and returns structured Python syntax and lint findings from Ruff. The LLM gateway runs only on the API. |
 | Data and sign-in | Supabase Postgres with Alembic migrations. Supabase Auth provides email/password accounts. |
 | AI feedback | A provider chain such as Gemini followed by Groq, with a per-user daily cap and a cache keyed by a hash of the problem, code with whitespace and comments stripped, and error signature. Pydantic validates the feedback; low-confidence results fall back to a generic hint. |
 | CI and hosting | GitHub Actions runs lint and tests on every push. Planned hosting options are Vercel or Netlify for the frontend and Render, Railway, or Fly for the API. |
