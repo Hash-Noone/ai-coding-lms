@@ -2,7 +2,7 @@
 
 AI Coding LMS is a planned learning platform for practicing Python in the browser. When a learner fails a test, the app will explain the likely mistake, offer a curated resource, and recommend practice problems for the concept they struggled with.
 
-**Status:** The web and API scaffolds run locally. The database schema and Supabase sign-in are implemented; the learning flow and AI feedback are not.
+**Status:** The database schema, Supabase sign-in, and a sample browser practice problem are implemented. Attempt storage and AI feedback are not.
 
 ## Getting started
 
@@ -24,6 +24,10 @@ npm run dev
 ```
 
 Open [http://localhost:5173](http://localhost:5173). From `web/`, run `npm run lint`, `npm test`, and `npm run build` to run the same checks as CI.
+
+Choose **Open Sum of positive numbers** and select **Run public tests**. No sign-in is needed to run the sample locally. The first run downloads Pyodide from jsDelivr, so it needs internet access. To try a passing run, use `return sum(n for n in numbers if n > 0)` inside the starter function. To try recovery, run `while True: pass`, then restore your solution and run again.
+
+When an attempts API is available, set `VITE_API_URL` to its base URL. For signed-in learners, completed runs POST `problem_slug`, `code`, and `test_results` to `/attempts` with the Supabase bearer token. The step 2 API scaffold does not implement that endpoint; leave the setting blank to practice without saving.
 
 ### API
 
