@@ -2,9 +2,9 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, expect, it, vi } from "vitest";
+import { problems } from "virtual:problem-bank";
 import { App } from "./App";
 import { postAttempt } from "./attempts";
-import { sampleProblem } from "./sampleProblem";
 
 const { run } = vi.hoisted(() => ({ run: vi.fn() }));
 vi.mock("./supabase", () => ({ supabase: null }));
@@ -28,38 +28,43 @@ afterEach(() => {
   vi.resetAllMocks();
 });
 
-it("opens the sample and shows pass or fail for each public test", async () => {
+it("opens a problem from the bank and shows pass or fail for each public test", async () => {
+  const sumOfEvens = problems.find((p) => p.slug === "sum-of-evens")!;
+  expect(problems).toHaveLength(52);
   run.mockResolvedValue({
     status: "completed",
     results: [
-      { id: "mixed", passed: false, actual: "0" },
-      { id: "negative", passed: true, actual: "0" },
-      { id: "empty", passed: true, actual: "0" },
+      { id: sumOfEvens.publicTests[0].id, passed: false, actual: "0" },
+      { id: sumOfEvens.publicTests[1].id, passed: true, actual: "0" },
+      { id: sumOfEvens.publicTests[2].id, passed: true, actual: "0" },
     ],
   });
   const user = userEvent.setup();
   render(<App />);
 
-  await user.click(screen.getByRole("button", { name: "Open Sum of positive numbers" }));
-  expect(screen.getByRole("heading", { name: "Sum of positive numbers" })).toBeTruthy();
+  await user.click(screen.getByRole("button", { name: `Open ${sumOfEvens.title}` }));
+  expect(screen.getByRole("heading", { name: sumOfEvens.title })).toBeTruthy();
   await screen.findByText("Python editor ready");
   await user.click(screen.getByRole("button", { name: "Run public tests" }));
   expect(await screen.findByText("2 of 3 public tests passed")).toBeTruthy();
-  expect(screen.getByText("Expected 8, got 0")).toBeTruthy();
+  expect(screen.getByText("Expected 6, got 0")).toBeTruthy();
   expect(screen.getAllByText("Pass")).toHaveLength(2);
   expect(screen.getByText("Fail")).toBeTruthy();
   expect(run).toHaveBeenCalledWith({
-    code: sampleProblem.starterCode, entryPoint: sampleProblem.entryPoint, tests: sampleProblem.publicTests,
+    code: sumOfEvens.starterCode,
+    entryPoint: sumOfEvens.entryPoint,
+    tests: sumOfEvens.publicTests,
   });
 });
 
 it("posts the submitted code and public test results to the authenticated attempts endpoint", async () => {
+  const sumOfEvens = problems.find((p) => p.slug === "sum-of-evens")!;
   const fetch = vi.fn().mockResolvedValue({ ok: true });
   vi.stubGlobal("fetch", fetch);
   const body = {
-    problem_slug: sampleProblem.slug,
-    code: sampleProblem.starterCode,
-    test_results: [{ id: "mixed", passed: false, actual: "0" }],
+    problem_slug: sumOfEvens.slug,
+    code: sumOfEvens.starterCode,
+    test_results: [{ id: sumOfEvens.publicTests[0].id, passed: false, actual: "0" }],
   };
   await postAttempt("https://api.example.com/", "test-token", body);
   expect(fetch).toHaveBeenCalledWith("https://api.example.com/attempts", {

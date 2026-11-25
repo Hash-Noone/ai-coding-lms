@@ -42,3 +42,22 @@ it("reports Python errors per test and isolates learner globals", () => {
   const namespaceCheck = run("seen = []\ndef sum_positives(numbers):\n    seen.append(1)\n    return len(seen)");
   expect(namespaceCheck.map(({ actual }) => actual)).toEqual(["1", "1", "1"]);
 });
+
+it("compares booleans, strings, lists, and dicts by canonical JSON without conflating bool and int", () => {
+  const results = runPythonTests(pyodide, {
+    code: "def check(x): return x",
+    entryPoint: "check",
+    tests: [
+      { id: "bool-true", label: "bool true", args: [true], expected: true },
+      { id: "bool-vs-int", label: "bool vs int", args: [1], expected: true },
+      { id: "dict-order", label: "dict key order", args: [{ b: 2, a: 1 }], expected: { a: 1, b: 2 } },
+      { id: "str", label: "string", args: ["hi"], expected: "hi" },
+    ],
+  });
+  expect(results).toEqual([
+    { id: "bool-true", passed: true, actual: "True" },
+    { id: "bool-vs-int", passed: false, actual: "1" },
+    { id: "dict-order", passed: true, actual: "{'a': 1, 'b': 2}" },
+    { id: "str", passed: true, actual: "'hi'" },
+  ]);
+});
