@@ -104,7 +104,14 @@ def test_syntax_mistake_must_not_parse(problem_dir):
 
 def test_signature_mismatch_is_rejected(problem_dir):
     (problem_dir / "starter.py").write_text("def sum_evens():\n    return 0\n")
-    assert any("starter.py sum_evens() takes" in error for error in validate(problem_dir))
+    assert "starter.py defines sum_evens(), reference defines sum_evens(numbers)" in validate(problem_dir)
+
+
+def test_required_parameter_that_should_be_optional_is_rejected(tmp_path):
+    target = tmp_path / "append-item"
+    shutil.copytree(DATA_DIR / "problems" / "append-item", target)
+    (target / "starter.py").write_text("def add_item(item, items):\n    return []\n")
+    assert any("starter.py defines add_item(item, items)" in error for error in validate(target))
 
 
 def test_printing_solutions_are_judged_by_return_value(problem_dir):

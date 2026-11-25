@@ -85,11 +85,23 @@ def run_solution(code: str, entry_point: str, tests: list[dict]) -> list[dict]:
         return [{"passed": False, "error": "the solution did not finish"} for _ in tests]
 
 
-def function_params(tree: ast.Module, name: str) -> list[str] | None:
+def function_signature(tree: ast.Module, name: str) -> str | None:
+    """Return the entry point's parameters with default values elided, e.g. 'item, items=...'."""
     for node in tree.body:
         if isinstance(node, ast.FunctionDef) and node.name == name:
             args = node.args
-            return [arg.arg for arg in args.posonlyargs + args.args]
+            positional = args.posonlyargs + args.args
+            required = len(positional) - len(args.defaults)
+            parts = [arg.arg if i < required else f"{arg.arg}=..." for i, arg in enumerate(positional)]
+            if args.vararg:
+                parts.append(f"*{args.vararg.arg}")
+            parts += [
+                arg.arg if default is None else f"{arg.arg}=..."
+                for arg, default in zip(args.kwonlyargs, args.kw_defaults)
+            ]
+            if args.kwarg:
+                parts.append(f"**{args.kwarg.arg}")
+            return ", ".join(parts)
     return None
 
 
@@ -157,16 +169,16 @@ def check_sources(sources: dict[str, str], entry_point: str, mistake_type: str) 
                 errors.append(f"{name} does not parse: {error.msg} (line {error.lineno})")
     if mistake_type == "syntax" and "wrong.py" in trees:
         errors.append("wrong.py is labeled syntax but parses")
-    signature = function_params(trees["reference.py"], entry_point) if "reference.py" in trees else None
+    signature = function_signature(trees["reference.py"], entry_point) if "reference.py" in trees else None
     if "reference.py" in trees and signature is None:
         errors.append(f"reference.py does not define {entry_point}()")
     for name in ("starter.py", "wrong.py"):
         if name in trees and signature is not None:
-            params = function_params(trees[name], entry_point)
+            params = function_signature(trees[name], entry_point)
             if params is None:
                 errors.append(f"{name} does not define {entry_point}()")
-            elif len(params) != len(signature):
-                errors.append(f"{name} {entry_point}() takes {params}, reference takes {signature}")
+            elif params != signature:
+                errors.append(f"{name} defines {entry_point}({params}), reference defines {entry_point}({signature})")
     if sources["wrong.py"].strip() == sources["reference.py"].strip():
         errors.append("wrong.py is identical to reference.py")
     return errors
