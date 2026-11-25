@@ -1,19 +1,42 @@
 import { type FormEvent, useEffect, useState } from "react";
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
 import { supabase } from "./supabase";
+import { ProblemView } from "./ProblemView";
+import { sampleProblem } from "./sampleProblem";
+import "./practice.css";
 
 export function App() {
+  const [problemOpen, setProblemOpen] = useState(false);
+  const [session, setSession] = useState<Session | null | undefined>(undefined);
+
+  useEffect(() => {
+    if (!supabase) return;
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, nextSession) => setSession(nextSession),
+    );
+    return () => subscription.unsubscribe();
+  }, []);
+
   return (
     <main>
-      <h1>AI Coding LMS</h1>
-      <p>Python practice is coming soon.</p>
-      {supabase ? <Auth client={supabase} /> : <p>Sign-in is not configured.</p>}
+      <header>
+        <h1>AI Coding LMS</h1>
+        <p>Practice Python in your browser.</p>
+      </header>
+      {problemOpen ? <ProblemView accessToken={session?.access_token} /> : (
+        <section className="problem-panel" aria-labelledby="practice-heading">
+          <h2 id="practice-heading">Sample practice</h2>
+          <button type="button" onClick={() => setProblemOpen(true)}>Open {sampleProblem.title}</button>
+        </section>
+      )}
+      <div className="account-panel">
+        {supabase ? <Auth client={supabase} session={session} /> : <p>Sign-in is not configured.</p>}
+      </div>
     </main>
   );
 }
 
-function Auth({ client }: { client: SupabaseClient }) {
-  const [session, setSession] = useState<Session | null | undefined>(undefined);
+function Auth({ client, session }: { client: SupabaseClient; session: Session | null | undefined }) {
   const [mode, setMode] = useState<"sign-in" | "sign-up">("sign-in");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,13 +44,6 @@ function Auth({ client }: { client: SupabaseClient }) {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const signingUp = mode === "sign-up";
-
-  useEffect(() => {
-    const { data: { subscription } } = client.auth.onAuthStateChange(
-      (_event, nextSession) => setSession(nextSession),
-    );
-    return () => subscription.unsubscribe();
-  }, [client]);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
