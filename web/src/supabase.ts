@@ -1,20 +1,22 @@
 /// <reference types="vite/client" />
 import { createClient } from "@supabase/supabase-js";
 
-function isHttpUrl(url: string): boolean {
-  if (!/^https?:\/\//i.test(url)) return false;
+function normalizeSupabaseUrl(raw: string | undefined): string | null {
+  const trimmed = raw?.trim();
+  if (!trimmed || !/^https?:\/\//i.test(trimmed)) return null;
 
   try {
-    new URL(url);
-    return true;
+    const parsed = new URL(trimmed);
+    const cleanedPath = parsed.pathname.replace(/\/rest\/v1\/?$/i, "").replace(/\/+$/, "");
+    return cleanedPath ? `${parsed.origin}${cleanedPath}` : parsed.origin;
   } catch {
-    return false;
+    return null;
   }
 }
 
-const url = import.meta.env.VITE_SUPABASE_URL?.trim();
-const publishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const url = normalizeSupabaseUrl(import.meta.env.VITE_SUPABASE_URL);
+const publishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY?.trim();
 
-export const supabase = url && publishableKey && isHttpUrl(url)
+export const supabase = url && publishableKey
   ? createClient(url, publishableKey)
   : null;
