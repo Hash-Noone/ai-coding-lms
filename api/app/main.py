@@ -18,6 +18,8 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "http://127.0.0.1:5173",
+        "http://localhost:4173",
+        "http://127.0.0.1:4173",
         "https://ai-coding-lms--jxxy0frp.preview.devinapps.com",
     ],
     allow_methods=["GET", "POST"],

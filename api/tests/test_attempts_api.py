@@ -107,6 +107,8 @@ def test_rejects_unknown_problem_and_client_supplied_user(client, session, monke
 
 @pytest.mark.parametrize("origin", [
     "http://localhost:5173",
+    "http://localhost:4173",
+    "http://127.0.0.1:4173",
     "https://ai-coding-lms--jxxy0frp.preview.devinapps.com",
 ])
 def test_cors_preflight(client, origin):
