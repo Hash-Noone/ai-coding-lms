@@ -2,7 +2,7 @@
 
 AI Coding LMS is a planned learning platform for practicing Python in the browser. When a learner fails a test, the app will explain the likely mistake, offer a curated resource, and recommend practice problems for the concept they struggled with.
 
-**Status:** The problem bank, browser runner, Supabase sign-in, attempt storage, and static checks are implemented. AI feedback is not.
+**Status:** The course catalog, lesson workspace, browser-local progress dashboard, problem bank, browser runner, Supabase sign-in, attempt storage, and static checks are implemented. AI feedback is not.
 
 ## Getting started
 
@@ -25,7 +25,11 @@ npm run dev
 
 Open [http://localhost:5173](http://localhost:5173). From `web/`, run `npm run lint`, `npm test`, and `npm run build` to run the same checks as CI.
 
-Choose **Open Sum of positive numbers** and select **Run public tests**. No sign-in is needed to run the sample locally. The first run downloads Pyodide from jsDelivr, so it needs internet access. To try a passing run, use `return sum(n for n in numbers if n > 0)` inside the starter function. To try recovery, run `while True: pass`, then restore your solution and run again.
+Open **Python Foundations**, choose **Start course**, and select **Run public tests** in the lesson workspace. No sign-in is needed. The first lesson is **Celsius to Fahrenheit**: use `return round(celsius * 9 / 5 + 32, 1)` inside its starter function for a passing solution. The first run downloads Pyodide from jsDelivr, so it needs internet access. To try recovery, run `while True: pass`, then restore your solution and run again.
+
+The four courses organize all 52 exercises by primary concept. Use the lesson outline or **Next lesson** to move through a course; a lesson completes only when all its public tests pass. **My learning** lists started courses and resumes at the first incomplete lesson. **My progress** summarizes course completion. **Resource library** searches and filters the 40 curated videos, preserving their chapter timestamps. Course and lesson hash URLs can be bookmarked.
+
+Enrollment, completed lessons, and code drafts persist in this browser's local storage only, including when signed out. Signing in does not sync this course progress across devices. Existing solved lessons remain recognized. Completion is a practice milestone, not a certificate or a trusted assessment.
 
 To save attempts locally, start the API below, set `VITE_API_URL=http://localhost:8000` in `web/.env` alongside the Supabase settings, and restart Vite. Sign in with Supabase and run the public tests. The app sends `problem_slug`, `code`, and `test_results` with the Supabase bearer token and displays **Attempt saved.** and any static findings when the API responds. A run that ends without test results is saved with an empty results list. Signed-out learners and learners without an API configured can still run public tests without saving.
 

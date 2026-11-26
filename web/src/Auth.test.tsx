@@ -44,7 +44,11 @@ function initializeWith(initialSession: Session | null) {
   });
 }
 
-beforeEach(() => initializeWith(null));
+beforeEach(() => {
+  window.history.replaceState(null, "", "#account");
+  window.localStorage.clear();
+  initializeWith(null);
+});
 afterEach(() => {
   cleanup();
   vi.resetAllMocks();

@@ -49,6 +49,7 @@ export function ProblemView({
   onBack,
   onSolved,
   accessToken,
+  backLabel = "← All problems",
 }: {
   problem: BankProblem;
   conceptNames: Record<string, string>;
@@ -56,6 +57,7 @@ export function ProblemView({
   onBack: () => void;
   onSolved?: (slug: string) => void;
   accessToken?: string;
+  backLabel?: string;
 }) {
   const apiUrl = import.meta.env.VITE_API_URL?.trim();
   const [initialCode, setInitialCode] = useState(() => loadDraft(problem.slug, problem.starterCode));
@@ -144,7 +146,7 @@ export function ProblemView({
     <section aria-labelledby="problem-title">
       <div className="problem-toolbar">
         <button type="button" className="btn-secondary" onClick={onBack}>
-          ← All problems
+          {backLabel}
         </button>
         <div className="concept-pills">
           {problem.concepts.map((slug) => (

@@ -11,9 +11,11 @@ it.each(["YOUR_SUPABASE_URL", "https://", "ftp://example.com"])(
   async (url) => {
     vi.stubEnv("VITE_SUPABASE_URL", url);
     vi.stubEnv("VITE_SUPABASE_PUBLISHABLE_KEY", "test-key");
+    const { supabase } = await import("./supabase");
     const { App } = await import("./App");
 
-    expect(renderToStaticMarkup(<App />)).toContain("Sign-in is not configured.");
+    expect(supabase).toBeNull();
+    expect(renderToStaticMarkup(<App />)).toContain("Start learning for free");
   },
 );
 
