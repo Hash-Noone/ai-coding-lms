@@ -59,6 +59,14 @@ export function App() {
   const selectedCourse = route.startsWith("course/") ? courses.find((course) => course.slug === courseSlug) : undefined;
   const lessons = selectedCourse ? courseLessons(selectedCourse) : [];
   const selectedProblem = lessons.find((lesson) => lesson.slug === lessonSlug);
+  useEffect(() => {
+    if (!selectedCourse || !selectedProblem) return;
+    setEnrolled((previous) => {
+      const next = [...new Set([...loadEnrolled(), ...previous, selectedCourse.slug])];
+      saveStoredList(ENROLLED_STORAGE_KEY, next);
+      return next;
+    });
+  }, [selectedCourse, selectedProblem]);
   const activeNav = selectedCourse ? "learning" : route;
   const myCourses = courses.filter((course) => enrolled.includes(course.slug) || courseProgress(course, solved).completed > 0);
   const featured = myCourses.find((course) => courseProgress(course, solved).percent < 100) ?? courses[0];

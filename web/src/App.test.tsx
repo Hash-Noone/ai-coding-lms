@@ -80,6 +80,17 @@ it("loads lesson deep links and keeps invalid stored slugs out of progress", () 
   expect(courseProgress(courses[0], [first.slug, first.slug]).completed).toBe(1);
 });
 
+it("records enrollment when opening a shared lesson before passing any tests", async () => {
+  const first = courseLessons(courses[0])[0];
+  window.history.replaceState(null, "", `#course/${courses[0].slug}/${first.slug}`);
+  const user = userEvent.setup();
+  render(<App />);
+  expect(JSON.parse(localStorage.getItem(ENROLLED_STORAGE_KEY)!)).toEqual([courses[0].slug]);
+  await user.click(screen.getByRole("button", { name: "My learning 1" }));
+  expect(screen.getByRole("button", { name: "View Python Foundations" })).toBeTruthy();
+  expect(localStorage.getItem(SOLVED_STORAGE_KEY)).toBeNull();
+});
+
 it("preserves another tab's enrollment and completion and reacts to storage changes", async () => {
   const user = userEvent.setup();
   render(<App />);
