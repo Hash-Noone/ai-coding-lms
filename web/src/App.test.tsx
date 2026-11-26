@@ -35,7 +35,7 @@ it("puts every existing problem in exactly one course", () => {
 it("filters courses by level and concept, with a recoverable empty state", async () => {
   const user = userEvent.setup();
   render(<App />);
-  await user.click(screen.getByRole("button", { name: "Intermediate", exact: true }));
+  await user.click(screen.getByRole("button", { name: "Intermediate" }));
   expect(screen.queryByRole("button", { name: "View Python Foundations" })).toBeNull();
   expect(screen.getByRole("button", { name: "View Data & Collections" })).toBeTruthy();
   await user.type(screen.getByRole("searchbox"), "no-such-course");
@@ -53,7 +53,7 @@ it("enrolls, saves completion once, advances, and resumes at the first incomplet
   const { unmount } = render(<App />);
   await user.click(screen.getByRole("button", { name: "View Python Foundations" }));
   expect(screen.getByRole("heading", { name: "Your course roadmap" })).toBeTruthy();
-  await user.click(screen.getByRole("button", { name: "Start course", exact: true }));
+  await user.click(screen.getByRole("button", { name: "Start course" }));
   expect(screen.getByRole("heading", { name: first.title })).toBeTruthy();
   expect(JSON.parse(localStorage.getItem(ENROLLED_STORAGE_KEY)!)).toEqual([course.slug]);
   await user.click(screen.getByRole("button", { name: "Pass public tests" }));

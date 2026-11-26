@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterEach, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { problems } from "virtual:problem-bank";
 import { App } from "./App";
 import { postAttempt } from "./attempts";
@@ -40,6 +40,11 @@ vi.mock("./PythonEditor", async () => {
   };
 });
 
+beforeEach(() => {
+  window.history.replaceState(null, "", "#explore");
+  vi.spyOn(window, "scrollTo").mockImplementation(() => {});
+});
+
 afterEach(() => {
   cleanup();
   window.localStorage.clear();
@@ -48,7 +53,7 @@ afterEach(() => {
   vi.resetAllMocks();
 });
 
-it("opens a problem from the bank and shows pass or fail for each public test", async () => {
+it("opens a lesson from its course and shows pass or fail for each public test", async () => {
   const sumOfEvens = problems.find((p) => p.slug === "sum-of-evens")!;
   expect(problems).toHaveLength(52);
   run.mockResolvedValue({
@@ -62,7 +67,8 @@ it("opens a problem from the bank and shows pass or fail for each public test", 
   const user = userEvent.setup();
   render(<App />);
 
-  await user.click(screen.getByRole("button", { name: `Open ${sumOfEvens.title}` }));
+  await user.click(screen.getByRole("button", { name: "View Thinking in Python" }));
+  await user.click(screen.getByRole("button", { name: new RegExp(sumOfEvens.title) }));
   expect(screen.getByRole("heading", { name: sumOfEvens.title })).toBeTruthy();
   await screen.findByText("Python editor ready");
   await user.click(screen.getByRole("button", { name: "Run public tests" }));
@@ -82,13 +88,14 @@ it("preserves draft code across navigation until reset", async () => {
   const user = userEvent.setup();
   render(<App />);
 
-  await user.click(screen.getByRole("button", { name: `Open ${sumOfEvens.title}` }));
+  await user.click(screen.getByRole("button", { name: "View Thinking in Python" }));
+  await user.click(screen.getByRole("button", { name: new RegExp(sumOfEvens.title) }));
   const editor = await screen.findByLabelText("Mock Python editor") as HTMLTextAreaElement;
   await user.clear(editor);
   await user.type(editor, "def sum_evens(numbers): return 42");
 
-  await user.click(screen.getByRole("button", { name: "← All problems" }));
-  await user.click(screen.getByRole("button", { name: `Open ${sumOfEvens.title}` }));
+  await user.click(screen.getByRole("button", { name: "← Course overview" }));
+  await user.click(screen.getByRole("button", { name: new RegExp(sumOfEvens.title) }));
   const reopened = await screen.findByLabelText("Mock Python editor") as HTMLTextAreaElement;
   expect(reopened.value).toBe("def sum_evens(numbers): return 42");
 
