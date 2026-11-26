@@ -37,8 +37,16 @@ export function App() {
 
   useEffect(() => {
     const onHashChange = () => setRoute(readRoute());
+    const onStorageChange = (event: StorageEvent) => {
+      if (event.key === ENROLLED_STORAGE_KEY || event.key === null) setEnrolled(loadEnrolled());
+      if (event.key === SOLVED_STORAGE_KEY || event.key === null) setSolved(loadSolved());
+    };
     window.addEventListener("hashchange", onHashChange);
-    return () => window.removeEventListener("hashchange", onHashChange);
+    window.addEventListener("storage", onStorageChange);
+    return () => {
+      window.removeEventListener("hashchange", onHashChange);
+      window.removeEventListener("storage", onStorageChange);
+    };
   }, []);
   useEffect(() => {
     if (!supabase) return;
@@ -72,10 +80,11 @@ export function App() {
     window.scrollTo({ top: 0, behavior: "instant" });
   }
   function enroll(course: Course) {
-    if (enrolled.includes(course.slug)) return;
-    const next = [...enrolled, course.slug];
-    setEnrolled(next);
-    saveStoredList(ENROLLED_STORAGE_KEY, next);
+    setEnrolled((previous) => {
+      const next = [...new Set([...loadEnrolled(), ...previous, course.slug])];
+      saveStoredList(ENROLLED_STORAGE_KEY, next);
+      return next;
+    });
   }
   function openLesson(course: Course, slug: string) {
     enroll(course);
@@ -86,8 +95,7 @@ export function App() {
   }
   function markSolved(slug: string) {
     setSolved((previous) => {
-      if (previous.includes(slug)) return previous;
-      const next = [...previous, slug];
+      const next = [...new Set([...loadSolved(), ...previous, slug])];
       saveStoredList(SOLVED_STORAGE_KEY, next);
       return next;
     });

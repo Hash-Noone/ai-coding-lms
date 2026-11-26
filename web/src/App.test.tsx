@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { cleanup, render, screen, within } from "@testing-library/react";
+import { act, cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { problems, resources } from "virtual:problem-bank";
@@ -78,6 +78,22 @@ it("loads lesson deep links and keeps invalid stored slugs out of progress", () 
   expect(screen.getByRole("heading", { name: first.title })).toBeTruthy();
   expect(screen.getByText("✓ Lesson complete. Nicely done!")).toBeTruthy();
   expect(courseProgress(courses[0], [first.slug, first.slug]).completed).toBe(1);
+});
+
+it("preserves another tab's enrollment and completion and reacts to storage changes", async () => {
+  const user = userEvent.setup();
+  render(<App />);
+  // Another tab saved after this tab mounted, before its storage event arrived.
+  localStorage.setItem(ENROLLED_STORAGE_KEY, JSON.stringify([courses[1].slug]));
+  await user.click(screen.getByRole("button", { name: "Start learning for free" }));
+  expect(new Set(JSON.parse(localStorage.getItem(ENROLLED_STORAGE_KEY)!))).toEqual(new Set([courses[0].slug, courses[1].slug]));
+  const otherLesson = courseLessons(courses[1])[0];
+  localStorage.setItem(SOLVED_STORAGE_KEY, JSON.stringify([otherLesson.slug]));
+  await user.click(screen.getByRole("button", { name: "Pass public tests" }));
+  expect(new Set(JSON.parse(localStorage.getItem(SOLVED_STORAGE_KEY)!))).toEqual(new Set([otherLesson.slug, courseLessons(courses[0])[0].slug]));
+  localStorage.setItem(ENROLLED_STORAGE_KEY, JSON.stringify(courses.map((course) => course.slug)));
+  act(() => window.dispatchEvent(new StorageEvent("storage", { key: ENROLLED_STORAGE_KEY })));
+  expect(screen.getByRole("button", { name: "My learning 4" })).toBeTruthy();
 });
 
 it("filters the real video library and preserves timestamped external links", async () => {
