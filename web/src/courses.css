@@ -24,18 +24,18 @@ em { font-family: Georgia, serif; font-weight: 400; }
 .app-shell { min-height: 100vh; }
 .skip-link { position: fixed; left: 240px; top: -60px; z-index: 10; background: white; padding: 12px; color: var(--accent); }
 .skip-link:focus { top: 10px; }
-.sidebar { position: fixed; inset: 0 auto 0 0; width: 222px; padding: 35px 19px 22px; border-right: 1px solid var(--border); background: #fff; display: flex; flex-direction: column; z-index: 4; }
+.sidebar { position: fixed; inset: 0 auto 0 0; width: 222px; padding: 35px 19px 22px; border-right: 1px solid var(--border); background: #fff; display: flex; flex-direction: column; z-index: 4; overflow-y: auto; }
 .brand { display: flex; align-items: center; gap: 10px; color: #243e34; text-decoration: none; font-size: 25px; font-weight: 750; letter-spacing: -1.4px; margin: 0 8px 49px; }
 .brand-icon { display: grid; place-items: center; width: 38px; height: 38px; background: #265e4a; color: #fff; border-radius: 11px; }
 .brand-light { font-weight: 400; }
 .brand small { font-size: 7px; display: block; letter-spacing: 1.4px; font-weight: 600; margin-top: 4px; }
 .nav-eyebrow { font-size: 9px; color: #929c95; letter-spacing: 1.9px; margin: 0 15px 13px; font-weight: 600; }
-.sidebar nav { display: flex; flex-direction: column; gap: 6px; }
+.sidebar nav { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
 .sidebar-link { border: 0; text-align: left; background: transparent; color: #737e78; display: flex; align-items: center; gap: 12px; padding: 13px 14px; border-radius: 7px; font-size: 12px; }
 .sidebar-link:hover { background: #f6f8f4; }
 .sidebar-link.active { background: #eaf2e9; color: #295e45; font-weight: 650; }
 .nav-count { margin-left: auto; background: #dbe8d7; border-radius: 4px; font-size: 10px; padding: 1px 5px; }
-.sidebar-bottom { margin-top: auto; padding-top: 50px; }
+.sidebar-bottom { margin-top: auto; padding-top: 50px; flex-shrink: 0; }
 .sidebar-note { padding: 20px 16px; background: #f6f7f0; border: 1px solid #edf0e7; border-radius: 10px; }
 .leaf-badge { color: #668065; display: block; margin-bottom: 13px; }
 .sidebar-note strong { font-family: Georgia, serif; font-size: 19px; line-height: 1.35; font-weight: 400; letter-spacing: -.4px; }
