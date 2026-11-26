@@ -107,6 +107,16 @@ it("preserves another tab's enrollment and completion and reacts to storage chan
   expect(screen.getByRole("button", { name: "My learning 4" })).toBeTruthy();
 });
 
+it("recommends an unfinished course after finishing the only enrolled course", async () => {
+  localStorage.setItem(ENROLLED_STORAGE_KEY, JSON.stringify([courses[0].slug]));
+  localStorage.setItem(SOLVED_STORAGE_KEY, JSON.stringify(courseLessons(courses[0]).map((lesson) => lesson.slug)));
+  const user = userEvent.setup();
+  render(<App />);
+  await user.click(screen.getByRole("button", { name: "Continue learning" }));
+  expect(screen.getByRole("heading", { name: courseLessons(courses[1])[0].title })).toBeTruthy();
+  expect(JSON.parse(localStorage.getItem(ENROLLED_STORAGE_KEY)!)).toContain(courses[1].slug);
+});
+
 it("filters the real video library and preserves timestamped external links", async () => {
   const user = userEvent.setup();
   render(<App />);

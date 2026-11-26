@@ -69,7 +69,9 @@ export function App() {
   }, [selectedCourse, selectedProblem]);
   const activeNav = selectedCourse ? "learning" : route;
   const myCourses = courses.filter((course) => enrolled.includes(course.slug) || courseProgress(course, solved).completed > 0);
-  const featured = myCourses.find((course) => courseProgress(course, solved).percent < 100) ?? courses[0];
+  const featured = myCourses.find((course) => courseProgress(course, solved).percent < 100)
+    ?? courses.find((course) => courseProgress(course, solved).percent < 100)
+    ?? courses[0];
   const featuredProgress = courseProgress(featured, solved);
   const query = search.trim().toLowerCase();
   const filteredCourses = (route === "learning" ? myCourses : courses).filter((course) =>
