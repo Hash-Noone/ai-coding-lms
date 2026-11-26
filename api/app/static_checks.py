@@ -15,6 +15,17 @@ class StaticFinding(BaseModel):
 
 
 def check_code(code: str) -> list[StaticFinding]:
+    if code.startswith("\ufeff"):
+        return [
+            StaticFinding(
+                source="ruff",
+                code="invalid-syntax",
+                message="Invalid non-printable character U+FEFF",
+                line=1,
+                column=1,
+            )
+        ]
+
     result = subprocess.run(
         [
             sys.executable, "-I", "-m", "ruff", "check",

@@ -24,3 +24,13 @@ def test_clean_solution_has_no_findings():
 
 def test_accepts_python_314_template_strings():
     assert check_code('message = t"Hello {1 + 2}"\n') == []
+
+
+def test_reports_leading_bom_as_syntax_error():
+    finding, = check_code("\ufeffdef add(x, y):\n    return x + y\n")
+
+    assert finding.source == "ruff"
+    assert finding.code == "invalid-syntax"
+    assert "U+FEFF" in finding.message
+    assert finding.line == 1
+    assert finding.column == 1
