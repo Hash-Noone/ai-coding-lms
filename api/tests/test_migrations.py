@@ -1,4 +1,5 @@
 import os
+from contextlib import nullcontext
 from pathlib import Path
 from uuid import uuid4
 
@@ -8,6 +9,9 @@ from alembic.config import Config
 from sqlalchemy import create_engine
 from sqlalchemy.engine import make_url
 from sqlalchemy.exc import IntegrityError
+
+from app import attempts
+from app.problems import problem_bank
 
 TESTS_DIR = Path(__file__).parent
 AUTH_STUB = TESTS_DIR / "fixtures/supabase_auth.sql"
@@ -111,3 +115,32 @@ def test_migration_lifecycle(postgres):
     command.upgrade(config, "head")
     assert sql("SELECT id FROM public.users").scalar_one() == existing_user
     assert sql("SELECT count(*) FROM public.concepts").scalar_one() == 12
+
+
+def test_save_attempt_on_migrated_postgres(postgres, monkeypatch):
+    db, config = postgres
+    command.upgrade(config, "head")
+    user_id = uuid4()
+    db.exec_driver_sql("INSERT INTO auth.users VALUES (%s)", (user_id,))
+    monkeypatch.setattr(
+        attempts.psycopg, "connect", lambda *args, **kwargs: nullcontext(db.connection.driver_connection)
+    )
+    problem = problem_bank()["sum-of-evens"]
+    test_results = [{"id": problem.public_tests[0].id, "passed": False, "actual": "0"}]
+    submission = attempts.AttemptSubmission(
+        problem_slug=problem.slug, code=problem.starter_code, test_results=test_results
+    )
+
+    first_id = attempts.save_attempt("unused", user_id, problem, submission)
+    second_id = attempts.save_attempt("unused", user_id, problem, submission)
+
+    assert first_id != second_id
+    saved = db.exec_driver_sql("""
+        SELECT attempts.id, user_id, problems.slug, code, test_results
+        FROM public.attempts JOIN public.problems ON problems.id = attempts.problem_id
+        ORDER BY attempts.id
+    """).all()
+    assert saved == [
+        (attempt_id, user_id, problem.slug, problem.starter_code, test_results)
+        for attempt_id in (first_id, second_id)
+    ]

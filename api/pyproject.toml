@@ -9,13 +9,15 @@ requires-python = ">=3.12"
 dependencies = [
     "alembic>=1.17,<2",
     "fastapi>=0.115,<1",
+    "httpx>=0.28,<1",
     "psycopg[binary]>=3.2,<4",
     "pydantic-settings>=2.8,<3",
+    "ruff>=0.11,<1",
     "uvicorn>=0.34,<1",
 ]
 
 [project.optional-dependencies]
-dev = ["httpx>=0.28,<1", "pytest>=8,<10", "ruff>=0.11,<1"]
+dev = ["pytest>=8,<10"]
 
 [tool.setuptools.packages.find]
 include = ["app"]

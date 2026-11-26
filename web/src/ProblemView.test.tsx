@@ -5,6 +5,7 @@ import { afterEach, expect, it, vi } from "vitest";
 import { problems } from "virtual:problem-bank";
 import { App } from "./App";
 import { postAttempt } from "./attempts";
+import { ProblemView } from "./ProblemView";
 
 const { run } = vi.hoisted(() => ({ run: vi.fn() }));
 vi.mock("./supabase", () => ({ supabase: null }));
@@ -43,6 +44,7 @@ afterEach(() => {
   cleanup();
   window.localStorage.clear();
   vi.unstubAllGlobals();
+  vi.unstubAllEnvs();
   vi.resetAllMocks();
 });
 
@@ -97,7 +99,7 @@ it("preserves draft code across navigation until reset", async () => {
 
 it("posts the submitted code and public test results to the authenticated attempts endpoint", async () => {
   const sumOfEvens = problems.find((p) => p.slug === "sum-of-evens")!;
-  const fetch = vi.fn().mockResolvedValue({ ok: true });
+  const fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({}) });
   vi.stubGlobal("fetch", fetch);
   const body = {
     problem_slug: sumOfEvens.slug,
@@ -109,5 +111,44 @@ it("posts the submitted code and public test results to the authenticated attemp
     method: "POST",
     headers: { Authorization: "Bearer test-token", "Content-Type": "application/json" },
     body: JSON.stringify(body),
+  });
+});
+
+it("saves a signed-in timed out run and shows findings returned by the API", async () => {
+  const problem = problems.find((p) => p.slug === "sum-of-evens")!;
+  vi.stubEnv("VITE_API_URL", "https://api.example.com");
+  run.mockResolvedValue({ status: "timeout" });
+  const fetch = vi.fn().mockResolvedValue({
+    ok: true,
+    json: async () => ({
+      id: 42,
+      test_results: [],
+      static_findings: [
+        { source: "ruff", code: "F401", message: "Unused import", line: 1, column: 8 },
+      ],
+    }),
+  });
+  vi.stubGlobal("fetch", fetch);
+  const user = userEvent.setup();
+  render(
+    <ProblemView
+      problem={problem}
+      conceptNames={{}}
+      relatedResources={[]}
+      onBack={() => {}}
+      accessToken="test-token"
+    />,
+  );
+
+  await screen.findByText("Python editor ready");
+  await user.click(screen.getByRole("button", { name: "Run public tests" }));
+
+  expect(await screen.findByText("Attempt saved.")).toBeTruthy();
+  expect(screen.getByRole("alert").textContent).toContain("Timed out");
+  expect(screen.getByText("Line 1: Unused import (F401)")).toBeTruthy();
+  expect(fetch).toHaveBeenCalledWith("https://api.example.com/attempts", {
+    method: "POST",
+    headers: { Authorization: "Bearer test-token", "Content-Type": "application/json" },
+    body: JSON.stringify({ problem_slug: problem.slug, code: problem.starterCode, test_results: [] }),
   });
 });

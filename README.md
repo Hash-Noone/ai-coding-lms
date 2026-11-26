@@ -2,7 +2,7 @@
 
 AI Coding LMS is a planned learning platform for practicing Python in the browser. When a learner fails a test, the app will explain the likely mistake, offer a curated resource, and recommend practice problems for the concept they struggled with.
 
-**Status:** The database schema, Supabase sign-in, and a sample browser practice problem are implemented. Attempt storage and AI feedback are not.
+**Status:** The problem bank, browser runner, Supabase sign-in, attempt storage, and static checks are implemented. AI feedback is not.
 
 ## Getting started
 
@@ -27,7 +27,7 @@ Open [http://localhost:5173](http://localhost:5173). From `web/`, run `npm run l
 
 Choose **Open Sum of positive numbers** and select **Run public tests**. No sign-in is needed to run the sample locally. The first run downloads Pyodide from jsDelivr, so it needs internet access. To try a passing run, use `return sum(n for n in numbers if n > 0)` inside the starter function. To try recovery, run `while True: pass`, then restore your solution and run again.
 
-When an attempts API is available, set `VITE_API_URL` to its base URL. For signed-in learners, completed runs POST `problem_slug`, `code`, and `test_results` to `/attempts` with the Supabase bearer token. The step 2 API scaffold does not implement that endpoint; leave the setting blank to practice without saving.
+To save attempts locally, start the API below, set `VITE_API_URL=http://localhost:8000` in `web/.env` alongside the Supabase settings, and restart Vite. Sign in with Supabase and run the public tests. The app sends `problem_slug`, `code`, and `test_results` with the Supabase bearer token and displays **Attempt saved.** and any static findings when the API responds. A run that ends without test results is saved with an empty results list. Signed-out learners and learners without an API configured can still run public tests without saving.
 
 ### API
 
@@ -43,6 +43,8 @@ python -m uvicorn app.main:app --reload
 
 Check [http://localhost:8000/health](http://localhost:8000/health). From `api/` with the environment active, run `ruff check .` and `python -m pytest`.
 
+The authenticated routes are `GET /problems`, `GET /problems/{id}` (where `id` is the bank slug), and `POST /attempts`. The catalog reads the checked-in `data/problems` directory and exposes only public tests. On the first saved run for a slug, the API adds the corresponding problem to Postgres if needed. The API verifies the session with Supabase, saves the browser-reported results, and returns the attempt ID, test results and findings from Python's AST parser and Ruff. It never executes the submitted Python or calls an LLM, and the browser's results are not a trusted grade.
+
 ### Local configuration
 
 CI does not require a hosted Supabase project. It runs the migration test on a local PostgreSQL service and mocks the auth client in web tests.
@@ -52,10 +54,10 @@ Each teammate should set `GEMINI_API_KEY` in their own `api/.env` when working o
 ### Supabase project setup
 
 1. Create a Supabase project. In Authentication, enable the Email provider and allow new users to sign up. For email confirmation, set the Site URL to the deployed web app URL (or `http://localhost:5173` for local-only testing) and configure SMTP for the pilot.
-2. Copy `api/.env.example` to `api/.env` and set `DATABASE_URL` to the database URI from **Connect**, with the database password filled in. Use the direct connection or session pooler URI and add `sslmode=require` if it is not already specified. With the virtual environment active, run `python -m app.check_db` and `alembic upgrade head` from `api/`.
+2. Copy `api/.env.example` to `api/.env`. Set `SUPABASE_URL` to the project URL and `SUPABASE_PUBLISHABLE_KEY` to its publishable key. Set `DATABASE_URL` to the database URI from **Connect**, with the database password filled in. Use the direct connection or session pooler URI and add `sslmode=require` if it is not already specified. With the virtual environment active, run `python -m app.check_db` and `alembic upgrade head` from `api/`.
 3. Copy `web/.env.example` to `web/.env` and set `VITE_SUPABASE_URL` to the project URL and `VITE_SUPABASE_PUBLISHABLE_KEY` to the publishable key (the legacy `anon` key also works). Set the same vars before building the deployed frontend. Never use the service-role key, secret key, or database URI in the frontend.
 
-The migration creates a matching LMS user for each Supabase Auth user, including existing accounts. The browser talks directly to Supabase for authentication, but has no direct access to LMS tables. The FastAPI data endpoints and token verification are part of step 5.
+The migration creates a matching LMS user for each Supabase Auth user, including existing accounts. The browser talks directly to Supabase for authentication, but only the API connects to LMS tables.
 
 ### Test migrations on local Postgres
 
