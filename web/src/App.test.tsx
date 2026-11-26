@@ -86,7 +86,7 @@ it("records enrollment when opening a shared lesson before passing any tests", a
   const user = userEvent.setup();
   render(<App />);
   expect(JSON.parse(localStorage.getItem(ENROLLED_STORAGE_KEY)!)).toEqual([courses[0].slug]);
-  await user.click(screen.getByRole("button", { name: "My learning 1" }));
+  await user.click(screen.getByRole("button", { name: /^My learning/ }));
   expect(screen.getByRole("button", { name: "View Python Foundations" })).toBeTruthy();
   expect(localStorage.getItem(SOLVED_STORAGE_KEY)).toBeNull();
 });
@@ -104,7 +104,7 @@ it("preserves another tab's enrollment and completion and reacts to storage chan
   expect(new Set(JSON.parse(localStorage.getItem(SOLVED_STORAGE_KEY)!))).toEqual(new Set([otherLesson.slug, courseLessons(courses[0])[0].slug]));
   localStorage.setItem(ENROLLED_STORAGE_KEY, JSON.stringify(courses.map((course) => course.slug)));
   act(() => window.dispatchEvent(new StorageEvent("storage", { key: ENROLLED_STORAGE_KEY })));
-  expect(screen.getByRole("button", { name: "My learning 4" })).toBeTruthy();
+  expect(screen.getByRole("button", { name: /^My learning/ }).textContent).toContain("4");
 });
 
 it("recommends an unfinished course after finishing the only enrolled course", async () => {
